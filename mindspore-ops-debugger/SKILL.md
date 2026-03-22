@@ -37,8 +37,8 @@ MindSpore 相关资料在用户的工作目录下：
 | `misleading_patterns.md` | 10+ 个误导性模式库 | Step 2 定界后必查，避免误判 |
 | `diagnostic_workflow.md` | 详细诊断流程 | 需要深度调试时参考 |
 | `fix_patterns.md` | 常见修复模式与代码模板 | Step 4 修复时参考 |
-| `case_studies.md` | 17 个代表性案例研究 | 全流程参考同类案例 |
-| `case_index.md` | 100 个案例分类索引 | 快速查找历史类似问题 |
+| `case_studies.md` | 110 个代表性案例研究（含 55 个新增 GitCode 案例） | 全流程参考同类案例 |
+| `case_index.md` | 110 个案例分类索引 | 快速查找历史类似问题 |
 | `operator_profiles.md` | Top 20 高频算子画像 | Step 3 定位高频算子时优先查看 |
 | `testing_guide.md` | 测试框架 2.0 使用指南 | Step 6 补充测试时参考 |
 | `aclnn_guide.md` | ACLNN 算子适配专项 | 处理 Ascend ACLNN 问题时参考 |
