@@ -84,18 +84,40 @@ class OllamaExtractor:
     
     def _image_to_base64(self, image):
         if isinstance(image, str):
+            # Skip SVG images (PIL cannot handle them)
+            if image.startswith('data:image/svg+xml') or image.startswith('<svg'):
+                return None
             if image.startswith('data:image'):
-                match = re.match(r'data:image/\w+;base64,(.+)', image)
+                match = re.match(r'data:image/(\w+);base64,(.+)', image)
                 if match:
-                    return match.group(1)
+                    img_format = match.group(1).lower()
+                    if img_format in ('svg', 'svg+xml'):
+                        return None
+                    return match.group(2)
                 return None
             elif image.startswith('http'):
-                response = requests.get(image, timeout=30, verify=False)
-                image = Image.open(io.BytesIO(response.content))
+                try:
+                    response = requests.get(image, timeout=30, verify=False)
+                    response.raise_for_status()
+                    image = Image.open(io.BytesIO(response.content))
+                except Exception as e:
+                    print(f"[WARN] Failed to download image from '{image[:50]}...', skipping: {e}")
+                    return None
             else:
-                image = Image.open(image)
+                try:
+                    image = Image.open(image)
+                except Exception as e:
+                    print(f"[WARN] Cannot identify image file '{image}', skipping: {e}")
+                    return None
         elif isinstance(image, bytes):
-            image = Image.open(io.BytesIO(image))
+            # Skip SVG bytes (PIL cannot handle them)
+            if image.startswith(b'<svg') or image.startswith(b'<?xml'):
+                return None
+            try:
+                image = Image.open(io.BytesIO(image))
+            except Exception as e:
+                print(f"[WARN] Cannot identify image file from bytes, skipping: {e}")
+                return None
         elif isinstance(image, np.ndarray):
             image = Image.fromarray(image)
 
@@ -135,24 +157,47 @@ class OllamaExtractor:
     
     def extract_text_from_image(self, image):
         try:
+            # Skip SVG images early (PIL cannot handle them)
             if isinstance(image, str):
+                if image.startswith('data:image/svg+xml') or image.startswith('<svg'):
+                    return None
                 if image.startswith('data:image'):
-                    match = re.match(r'data:image/\w+;base64,(.+)', image)
+                    match = re.match(r'data:image/(\w+);base64,(.+)', image)
                     if match:
-                        image_data = base64.b64decode(match.group(1))
-                        image = Image.open(io.BytesIO(image_data))
+                        img_format = match.group(1).lower()
+                        if img_format in ('svg', 'svg+xml'):
+                            return None
+                        try:
+                            image_data = base64.b64decode(match.group(2))
+                            image = Image.open(io.BytesIO(image_data))
+                        except Exception as e:
+                            print(f"[WARN] Cannot identify image from data URI, skipping: {e}")
+                            return None
                     else:
                         return None
                 elif image.startswith('http'):
-                    response = requests.get(image, timeout=30, verify=False)
-                    image = Image.open(io.BytesIO(response.content))
+                    try:
+                        response = requests.get(image, timeout=30, verify=False)
+                        response.raise_for_status()
+                        image = Image.open(io.BytesIO(response.content))
+                    except Exception as e:
+                        print(f"[WARN] Failed to download image from URL, skipping: {e}")
+                        return None
                 else:
-                    image = Image.open(image)
+                    try:
+                        image = Image.open(image)
+                    except Exception as e:
+                        print(f"[WARN] Cannot identify image file, skipping: {e}")
+                        return None
             elif isinstance(image, bytes):
-                image = Image.open(io.BytesIO(image))
+                try:
+                    image = Image.open(io.BytesIO(image))
+                except Exception as e:
+                    print(f"[WARN] Cannot identify image file from bytes, skipping: {e}")
+                    return None
             elif isinstance(image, np.ndarray):
                 image = Image.fromarray(image)
-            
+
             if getattr(image, 'format', None) == 'GIF':
                 print(f"[DEBUG] Skipping GIF image")
                 return None
@@ -211,9 +256,8 @@ class OllamaExtractor:
                 # Timeout likely means CogViT crashed - skip this image
                 print(f"[WARN] OCR timeout, skipping image (likely CogViT incompatibility)")
                 return None
-            
-        except requests.exceptions.ConnectionError:
-            raise OCRExtractionError("Ollama server not running. Please start Ollama with: ollama serve")
+            except requests.exceptions.ConnectionError:
+                raise OCRExtractionError("Ollama server not running. Please start Ollama with: ollama serve")
         except OCRExtractionError:
             raise
         except Exception as e:
