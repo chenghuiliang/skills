@@ -392,6 +392,8 @@ EZ9999 / error code = 0x800000
 | **驱动未加载** | 驱动安装异常，`lspci` 无输出 | 重装驱动/固件/CANN |
 | **transfer_to_npu 冲突** | `transfer_to_npu` 与 `torch.jit.script` 不兼容 | 不要同时使用，升级版本 |
 | **torch.compile 兼容性** | `torch._dynamo.exc.Unsupported` | 找 `from user code` 调用栈，检查 torch_npu wrapper 是否有 side effect |
+| **ONNX Runtime bfloat16 不支持** | ONNX Runtime CPU backend 不支持 bfloat16 的 Add/Sub/Mul 等算术运算 | 检查测试是否使用了 bfloat16 算术运算，考虑跳过或修改测试 |
+| **onnx 包缺失** | PyTorch ONNX 功能依赖 onnx 包，缺失时导出失败 | `pip install onnx==1.17.0` |
 
 ### 诊断步骤
 
@@ -512,6 +514,16 @@ torch_npu 报错
 │     ├─ "set_to_none is not supported" → 改 set_to_none=False
 │     ├─ aclnnInplaceAdd tensor size 不匹配 → 检查参数分组逻辑
 │     └─ KeyError on state_dict["state"][0] → optimizer state 为空，添加非空守卫
+│
+│  └─ ONNX 测试失败
+│     ├─ "AttributeError: module 'onnx' has no attribute 'load_model_from_string'" → 缺失 onnx 包
+│     │  └─ pip install onnx==1.17.0
+│     ├─ "Could not find an implementation for Add/Sub/Mul" + bfloat16 → ONNX Runtime CPU 不支持 bfloat16 算术
+│     │  ├─ 检查测试是否使用 bfloat16 算术运算（非 cast）
+│     │  ├─ 对比 PyTorch 官方：CPU 测试是否有此用例，CUDA 测试是否跳过
+│     │  ├─ 检查 onnx_test_common.py 中 backend 配置（硬编码 CPUExecutionProvider）
+│     │  └─ 添加 skipIfONNXRuntimeNoBFloat16 装饰器跳过测试
+│     └─ 其他 ONNX Runtime 错误 → 检查 providers 列表，确认无 NPUExecutionProvider
 │
 └─ 精度问题
    ├─ 全零/全 NaN → 算子执行异常或 format 错误

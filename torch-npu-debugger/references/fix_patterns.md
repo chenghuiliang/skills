@@ -13,6 +13,7 @@
 9. [非连续 tensor 修复](#9-非连续-tensor-修复)
 10. [ACL API 边界保护](#10-acl-api-边界保护)
 11. [Optimizer 测试兼容性修复](#11-optimizer-测试兼容性修复)
+12. [ONNX 测试兼容性修复](#12-onnx-测试兼容性修复)
 
 ---
 
@@ -586,3 +587,89 @@ if state_dict["state"] and "step" in state_dict["state"][0] and torch.is_tensor(
 **适用场景**: `test/optim/test_optim.py` 中 `_test_state_dict` 方法，以及任何直接按 key 访问 optimizer state 的测试代码。
 
 **排查要点**: 当 optimizer 测试出现 `KeyError` 且 key 为整数时，优先检查 optimizer 是否在当前配置下会产生空 state（如无 momentum 的 SGD、无 state 的自定义 optimizer）。
+
+---
+
+## 12. ONNX 测试兼容性修复
+
+### 12.1 ONNX Runtime bfloat16 算术运算不支持
+
+**问题**: torch_npu ONNX 测试 `test_arithmetic_bfp16` 失败，错误信息：
+```
+NotImplemented: [ONNXRuntimeError] : 9 : NOT_IMPLEMENTED : Could not find an implementation for Add(14)
+```
+
+**根因分析**:
+1. **ONNX Runtime CPU 限制**: ONNX Runtime CPUExecutionProvider 不支持 bfloat16 的 Add/Sub/Mul 等算术运算
+2. **torch_npu 测试架构**: `test/onnx/onnx_test_common.py:370` 硬编码使用 `CPUExecutionProvider`
+3. **无 NPU Provider**: ONNX Runtime 官方不支持 Ascend NPU，无 NPUExecutionProvider
+
+**验证方法**:
+```python
+import onnxruntime as ort
+print(ort.get_available_providers())
+# ['AzureExecutionProvider', 'CPUExecutionProvider'] - 无 NPU provider
+
+# 测试 ONNX Runtime CPU 对 bfloat16 的支持
+import torch
+import torch.nn as nn
+
+class Arithmetic(nn.Module):
+    def forward(self, x):
+        y = torch.ones(3, 4, dtype=torch.bfloat16)
+        x = x.type_as(y)
+        return torch.mul(torch.add(x, y), torch.sub(x, y))  # 算术运算 - CPU 不支持
+
+class CastOnly(nn.Module):
+    def forward(self, x):
+        y = torch.ones(3, 4, dtype=torch.bfloat16)
+        return x.type_as(y).to(dtype=torch.float16)  # 仅 cast - CPU 支持
+```
+
+**修复方案**: 添加 skip 装饰器，当环境不支持时跳过测试。
+
+**文件1**: `test/onnx/pytorch_test_common.py`
+
+```python
+skipIfONNXRuntimeNoBFloat16 = _skipper(
+    lambda: True,
+    "ONNX Runtime CPU does not support bfloat16 for Add/Sub/Mul ops",
+)
+```
+
+**文件2**: `test/onnx/test_pytorch_onnx_onnxruntime_npu.py`
+
+```python
+import pytorch_test_common
+from pytorch_test_common import (
+    ...
+    skipIfONNXRuntimeNoBFloat16,
+    ...
+)
+
+@skipIfUnsupportedMinOpsetVersion(13)
+@skipIfNoBFloat16NPU
+@skipIfONNXRuntimeNoBFloat16  # 新增
+ def test_arithmetic_bfp16(self):
+    ...
+```
+
+**适用场景**:
+- 测试使用 bfloat16 dtype 进行算术运算（Add/Sub/Mul/Div 等）
+- ONNX Runtime 只能使用 CPUExecutionProvider
+- 对比验证：PyTorch 官方 CUDA 测试在缺乏 GPU 时也会被跳过
+
+**排查要点**:
+1. 检查 ONNX Runtime 可用 providers：`onnxruntime.get_available_providers()`
+2. 检查测试代码中 ONNX 后端配置位置：`onnx_test_common.py` 中 `InferenceSession` 的 `providers` 参数
+3. 区分 cast 操作与算术运算：ONNX Runtime CPU 支持 bfloat16 cast，但不支持算术
+4. 对比 PyTorch 官方测试：确认是否只在 CUDA 测试中存在，CPU 测试是否跳过
+
+**长期解决方案**:
+1. **华为提供 ONNX Runtime NPU Provider**: 开发 `onnxruntime-npu` 包支持 NPUExecutionProvider
+2. **使用 REFERENCE backend**: 修改测试使用 `OnnxBackend.REFERENCE`，但数值验证可能失败（输出 NaN）
+3. **仅验证导出**: 设置 `options.verify_data = False` 仅检查 ONNX 导出成功，不验证数值
+
+**参考**:
+- ONNX Runtime Execution Providers: https://onnxruntime.ai/docs/execution-providers/
+- PyTorch 官方行为：PyTorch CUDA 测试在 `BFloat16 CUDA is not available` 时跳过
