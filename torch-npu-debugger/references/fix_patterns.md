@@ -288,7 +288,35 @@ at::Tensor xxx_backward_npu(const at::Tensor& grad_output, const at::Tensor& sel
 }
 ```
 
-### 5.2 添加缺失的 backward
+### 5.2 修复 backward 非连续张量检查
+
+**问题**: backward 函数中使用 `TORCH_CHECK` 强制要求输入 contiguous，但 PyTorch CPU/GPU 实现是自动转换而非报错。
+
+**典型错误**:
+```
+RuntimeError: _cdist_backward requires grad to be contiguous
+```
+
+**修复**: 将检查改为自动转换，与 PyTorch 原生行为对齐。
+
+```cpp
+// Before: strict check and error
+TORCH_CHECK(x1.is_contiguous(), "_cdist_backward requires X1 to be contiguous"
+            + OPS_ERROR(ErrCode::TYPE));
+TORCH_CHECK(grad.is_contiguous(), "_cdist_backward requires grad to be contiguous"
+            + OPS_ERROR(ErrCode::TYPE));
+
+// After: auto-convert to contiguous
+at::Tensor x1_contig = x1.is_contiguous() ? x1 : x1.contiguous();
+at::Tensor grad_contig = grad.is_contiguous() ? grad : grad.contiguous();
+
+// Use *_contig in subsequent operations
+EXEC_NPU_CMD(aclnnXxxBackward, grad_contig, x1_contig, result);
+```
+
+**关键原则**: torch_npu 应与 PyTorch CPU/GPU 行为一致，自动处理非连续张量而非强制要求连续。
+
+### 5.3 添加缺失的 backward
 
 **问题**: 算子只有 forward 没有 backward，导致 autograd 失败。
 

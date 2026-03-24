@@ -61,6 +61,7 @@
 | **dtype 未正确传递** | 输入 dtype 在转换过程中丢失 | 检查 npu_preparation 和 dtype 推导 |
 | **CANN 内核变更** | CANN 升级后算子计算行为变化 | 对比不同 CANN 版本结果 |
 | **反向传播精度** | backward 中累加误差或 dtype 降级 | 检查 grad 函数的 dtype 处理 |
+| **反向传播非连续张量** | backward 中 TORCH_CHECK 强制要求 contiguous，但 PyTorch 是自动转换 | 对比 PyTorch CPU/GPU 实现，改为自动转换 |
 | **Format 转换精度损失** | NZ/FRACTAL_Z 格式转换引入误差 | 检查 FormatHelper 转换路径 |
 | **GE 初始化顺序** | `set_device()` 提前触发 GEInitialize，precision_mode 参数未传入，默认低精度 | plog 搜 `PrecisionMode`，避免在配置完成前调用 `set_device()` |
 | **CPU fallback 误导** | 算子 NPU 未实现回退 CPU 执行，但 CPU 实现本身有 bug | 观察 warning 区分"NPU 未实现"和"CPU 本身有 bug" |
@@ -85,6 +86,7 @@ allclose 失败
 ├─ 大幅偏差 → 逻辑错误或参数传递错误
 ├─ 仅 fp16/bf16 偏差 → dtype 提升缺失
 ├─ 仅反向偏差，正向正常 → 检查 backward 实现
+├─ 反向报错 "requires grad to be contiguous" → 对比 PyTorch CPU/GPU 实现，应自动转换而非检查
 ├─ 切分计算与整体计算不一致 → MatMul K-shift 优化，试 CLOSE_MATMUL_K_SHIFT=1
 ├─ 非连续 tensor 结果偏移 → 检查 out 参数写入逻辑（如 logspace.out）
 ├─ set_device() 后精度降低 → GE 初始化顺序问题，plog 搜 PrecisionMode
@@ -495,6 +497,10 @@ torch_npu 报错
 │  │  ├─ 检查 allow_internal_format 开关
 │  │  ├─ 检查 tensor 维度是否满足目标格式约束
 │  │  └─ 尝试 npu_format_cast 转为基础格式
+│  │
+│  ├─ "requires * to be contiguous" → torch_npu 实现与 PyTorch 语义不一致
+│  │  ├─ 对比 PyTorch CPU/GPU 实现：应自动转换而非检查报错
+│  │  └─ 修复：将 TORCH_CHECK 改为自动转换 `tensor.is_contiguous() ? tensor : tensor.contiguous()`
 │  │
 │  ├─ SIGSEGV / 段错误 → 内存问题
 │  │  ├─ 启用 ASCEND_LAUNCH_BLOCKING=1 同步执行
