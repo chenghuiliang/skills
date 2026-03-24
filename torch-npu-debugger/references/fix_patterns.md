@@ -883,3 +883,104 @@ python test_utility_funs.py -v -k test_verbose
 
 **参考**:
 - PyTorch 官方 test/onnx 目录: https://github.com/pytorch/pytorch/tree/main/test/onnx
+
+---
+
+## 14. 框架层语义修复
+
+### 14.1 修复 _to_copy 语义违反
+
+**问题**: `tensor.to(dtype, copy=True)` 未正确返回新 tensor，而是返回原 tensor。
+
+**根因**: `_to_copy` 函数中添加了短路优化，当 dtype 相同时直接返回 `self`，违反了 `_to_copy` 的语义约束。
+
+**PyTorch 语义**:
+- `to()` 函数负责处理 `copy` 参数
+- `_to_copy` 函数**必须始终创建新 tensor**
+- `copy=True` 时调用 `_to_copy`，期望一定创建新 tensor
+
+**修复前代码**:
+```cpp
+// torch_npu/csrc/aten/common/ToKernelNpu.cpp
+at::Tensor NPUNativeFunctions::_to_copy(...) {
+    if (dtype.has_value() && !layout.has_value() && !device.has_value()) {
+        if (self.dtype() == dtype) {
+            return self;  // 错误：违反 _to_copy 语义
+        }
+        ...
+    }
+    ...
+}
+```
+
+**修复后代码**:
+```cpp
+// torch_npu/csrc/aten/common/ToKernelNpu.cpp
+at::Tensor NPUNativeFunctions::_to_copy(...) {
+    // Note: _to_copy should always create a new tensor, even if dtype is the same.
+    // The copy flag is handled at the to() level, and _to_copy is only called when
+    // a copy is needed. Do not add short-circuit return self here.
+    if (dtype.has_value() && !layout.has_value() && !device.has_value()) {
+        // 删除短路返回逻辑
+        if (dtype == at::ScalarType::Double) {
+            TORCH_NPU_WARN_ONCE(...);
+        }
+        dtype = (dtype == at::ScalarType::Double) ? at::ScalarType::Float : dtype;
+    }
+    // ... 后续创建新 tensor 的逻辑
+}
+```
+
+**修复原则**:
+1. 删除短路返回 `self` 的逻辑
+2. 添加英文注释说明语义约束
+3. 确保注释解释清楚为什么不能返回 `self`
+
+### 14.2 测试用例启用流程
+
+**场景**: 修复了测试用例依赖的 bug 后，需要在门禁上启用该测试。
+
+**步骤**:
+
+**步骤 1**: 从禁用列表移除
+
+```bash
+# 编辑禁用列表
+test/unsupported_test_cases/.pytorch-disabled-tests.json
+
+# 删除或注释掉对应测试条目
+- "test_to (__main__.TestTorch)": ["", [""]],
+```
+
+**步骤 2**: 处理上游限制（如有）
+
+```python
+# test/test_torch.py
+def test_to(self):
+    self._test_to_with_layout(torch.strided)
+    # Skip sparse_csr test due to PyTorch upstream limitation:
+    # SparseCsrTensor.cpp:278-282 restricts device to CPU/CUDA/XPU/Meta only.
+    raise unittest.SkipTest(
+        'sparse_csr to NPU is not supported due to PyTorch upstream limitation. '
+        'SparseCsrTensor.cpp restricts device to CPU/CUDA/XPU/Meta only.'
+    )
+```
+
+**步骤 3**: 验证测试在门禁执行
+
+```bash
+# 本地验证
+cd test && python test_torch.py -v -k test_to
+
+# 预期结果:
+# test_to (__main__.TestTorch) ... ok (strided 部分通过)
+# 或显示 SKIP (sparse_csr 部分跳过)
+```
+
+**验证清单**:
+- [ ] 测试从禁用列表移除
+- [ ] 测试在本地通过
+- [ ] 上游限制测试添加 SkipTest
+- [ ] 门禁执行显示测试被执行（通过或跳过）
+
+---

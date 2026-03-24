@@ -586,4 +586,85 @@ torch_npu 报错
    ├─ 非连续 tensor 结果偏移 → 检查 out 参数写入逻辑
    ├─ set_device() 后精度降低 → GE 初始化顺序，plog 搜 PrecisionMode
    └─ warning 提示 CPU 执行但结果仍错 → CPU fallback 路径本身有 bug
+
+## 13. 测试用例与门禁执行问题
+
+### 13.1 测试用例在门禁上未执行
+
+**问题现象**:
+- 本地修复了测试用例，但门禁上仍然显示失败或根本没有执行
+- PR 提交后测试状态没有变化
+- 测试明明存在但门禁报告显示被跳过
+
+**定界步骤**:
+
 ```
+测试未在门禁执行
+├─ 检查禁用列表 → `.pytorch-disabled-tests.json` 中是否有该测试
+├─ 检查测试选择策略 → `access_control_test.py` + `TestMgr` + `Strategy`
+├─ 检查测试文件位置 → `test/npu/` 下才被认为是核心测试
+└─ 检查测试类/方法名 → 是否与禁用列表中的完全匹配
+```
+
+**关键文件**:
+- `test/unsupported_test_cases/.pytorch-disabled-tests.json` - 禁用测试列表
+- `ci/access_control_test.py` - 门禁测试选择逻辑
+- `ci/access_control/strategy.py` - 测试选择策略
+
+**禁用列表检查**:
+
+```bash
+# 检查测试是否在禁用列表中
+grep "test_to" test/unsupported_test_cases/.pytorch-disabled-tests.json
+
+# 查看禁用列表格式
+head -50 test/unsupported_test_cases/.pytorch-disabled-tests.json
+```
+
+**测试选择机制**:
+
+| 策略 | 说明 | 适用场景 |
+|------|------|---------|
+| `TestFileStrategy` | 根据修改文件匹配对应测试文件 | 修改 test_xxx.py |
+| `CoreTestStrategy` | 加载 `test/npu/` 下所有测试 | 通用核心测试 |
+| `DirectoryMappingStrategy` | 目录映射规则 | csrc/ 修改映射到对应测试 |
+| `OpStrategy` | 算子相关测试 | op-plugin 修改 |
+
+**修复方案**:
+1. 从禁用列表移除测试条目
+2. 确保测试文件在正确目录（`test/npu/` 才能被 CoreTestStrategy 选中）
+3. 更新 `access_control/strategy.py` 添加新的映射规则（如有必要）
+
+### 13.2 PyTorch 上游限制导致的测试失败
+
+**问题现象**:
+- 修复代码后测试仍失败
+- 错误与 NPU 实现无关，而是 PyTorch 本身不支持
+- 例如：`sparse_csr` tensor 不支持 PrivateUse1 设备
+
+**典型错误**:
+```
+RuntimeError: device type of values (npu) must be CPU or CUDA or XPU or Meta
+```
+
+**定位方法**:
+1. 对比 PyTorch 官方代码，检查限制来源
+2. 搜索 PyTorch 源码中的设备类型检查
+3. 确认是否为已知限制
+
+**修复方案**:
+- 添加 `unittest.SkipTest` 跳过该测试
+- 在注释中说明跳过原因和上游限制位置
+- 示例：
+
+```python
+def test_to(self):
+    self._test_to_with_layout(torch.strided)
+    # Skip sparse_csr test due to PyTorch upstream limitation:
+    # SparseCsrTensor.cpp:278-282 restricts device to CPU/CUDA/XPU/Meta only.
+    raise unittest.SkipTest(
+        'sparse_csr to NPU is not supported due to PyTorch upstream limitation.'
+    )
+```
+
+---
