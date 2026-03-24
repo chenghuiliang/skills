@@ -23,6 +23,7 @@
 |------|---------|---------|
 | 精度/数值 | ~20% | opapi/aclops kernel, CANN |
 | 算子注册/分发 | ~10% | codegen, TORCH_LIBRARY_IMPL |
+| **Dispatch Key 冲突** | **~2%** | **yaml sparse 配置, VariableFallbackKernel** |
 | Shape/Format | ~10% | FormatHelper, npu_preparation |
 | ACLNN 适配 | ~10% | op_api_common.h, CANN headers |
 | 编译/版本配套 | ~15% | ci/build.sh, CMake, CANN/op-plugin 版本 |
@@ -113,6 +114,35 @@ allclose 失败
 | **DO_COMPATIBILITY fallback 失败** | opapi 回退到 aclops 但 aclops 也没实现 | 检查两条路径的实现 |
 | **Autograd 注册缺失** | 有 forward 但没注册 autograd | 检查 AutogradPrivateUse1 注册 |
 | **codegen 遗漏** | 代码生成时遗漏了某个算子 | 检查 torchnpugen/ 配置 |
+| **dispatch key 重复注册** | 同一算子在同一 dispatch key 上有多个注册 | 检查 yaml sparse 配置与 fallback 冲突 |
+
+### Dispatch Key 冲突专项诊断
+
+**典型错误信息**:
+```
+RuntimeError: expected_k._equalsBoxedAndUnboxed(dispatchTable_[idx])
+INTERNAL ASSERT FAILED at ".../OperatorEntry.cpp":475
+name: aten::xxx
+schema: aten::xxx(...)
+...
+SparsePrivateUse1: registered at torch_npu/csrc/aten/RegisterSparseNPU.cpp:xxx
+```
+
+**触发条件**:
+- 算子在 yaml 中配置了 `sparse` 支持
+- `VariableFallbackKernel.cpp` 已为所有算子注册 SparsePrivateUse1 fallback
+- 两者冲突导致同一 dispatch key 重复注册
+
+**诊断步骤**:
+1. 从错误信息提取算子名（如 `aten::max.out`）
+2. 检查 yaml 配置: `grep -A3 "max.out" op_plugin/config/op_plugin_functions.yaml`
+3. 确认是否有 `sparse:` 配置
+4. 检查 PyTorch 原生实现: `grep "max.out" pytorch/aten/src/ATen/native/native_functions.yaml`
+5. 对比: PyTorch 原生无 sparse 实现但 torch_npu yaml 配置了 sparse → 配置错误
+
+**修复方案**:
+- 从 yaml 中移除该算子的 `sparse` 配置
+- 删除生成的 `RegisterSparseNPU.cpp` 并重新编译
 
 ### 诊断步骤
 
@@ -120,6 +150,7 @@ allclose 失败
 2. 搜索注册: `rg "TORCH_LIBRARY_IMPL.*PrivateUse1" -l` 查找注册文件
 3. 检查 dispatch: 确认注册的 dispatch key 是否正确
 4. 检查 fallback: DO_COMPATIBILITY 是否正确配置
+5. 检查冲突: 确认 yaml 配置是否与 VariableFallbackKernel 冲突
 
 ---
 
@@ -476,6 +507,11 @@ torch_npu 报错
 │  │  ├─ 新算子 → 需要添加 TORCH_LIBRARY_IMPL 注册
 │  │  ├─ 稀疏 tensor 输入 → NPU 不支持稀疏算子，改用密集等价实现
 │  │  └─ 已有算子 → 检查 dispatch key 和 codegen
+│  │
+│  ├─ "expected_k._equalsBoxedAndUnboxed" → dispatch key 重复注册冲突
+│  │  ├─ 提取算子名 → 检查 yaml 中是否有 `sparse` 配置
+│  │  ├─ 对比 PyTorch 原生实现 → 原生无 sparse 但 torch_npu 有 → 配置错误
+│  │  └─ 修复: 移除 yaml 中的 sparse 配置，删除 RegisterSparseNPU.cpp 重编
 │  │
 │  ├─ "undefined symbol: aclnn*" → CANN 版本不支持
 │  │  ├─ 添加 DO_COMPATIBILITY fallback

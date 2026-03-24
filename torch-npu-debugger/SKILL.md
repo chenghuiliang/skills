@@ -4,7 +4,8 @@ description: >
   端到端定位并解决 torch_npu 算子问题的专家 skill。涵盖问题分析、定界、定位、修复、回归验证、测试补充全流程。
   torch_npu 是 PyTorch 的 Ascend NPU 后端适配层，代码分为框架层（torch_npu/csrc）和算子层（third_party/op-plugin）。
   当用户提到 torch_npu 算子问题、NPU 算子 bug、ACLNN 适配错误、精度问题、format 转换异常、
-  dispatch key 错误、DO_COMPATIBILITY fallback、OpCommand 报错、算子注册失败、NPU 编译错误、
+  dispatch key 错误、dispatch key 冲突、expected_k._equalsBoxedAndUnboxed、_dispatch_check_all_invariants、
+  DO_COMPATIBILITY fallback、OpCommand 报错、算子注册失败、NPU 编译错误、
   stream 同步问题、dtype 不匹配、反向传播异常等任何与 torch_npu 相关的问题时，
   都应该使用这个 skill。即使用户只是提到了一个 torch_npu 报错或者要调试某个 NPU 算子的行为，也应该触发此 skill。
   同样适用于 torch_npu 算子开发、ACLNN 算子移植、op-plugin 算子适配、NPU 算子测试编写等开发场景。

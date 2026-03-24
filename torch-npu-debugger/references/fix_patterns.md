@@ -250,6 +250,77 @@ TORCH_LIBRARY_IMPL(aten, AutogradPrivateUse1, m) {
 
 **修复**: 确保 aclops 中有对应实现，或提供内联 fallback。
 
+### 4.4 修复 Dispatch Key 重复注册冲突
+
+**问题**: 算子在 yaml 中配置了 `sparse` 支持，与 `VariableFallbackKernel.cpp` 中注册的 SparsePrivateUse1 fallback 冲突，导致 `expected_k._equalsBoxedAndUnboxed` 错误。
+
+**诊断特征**:
+```
+RuntimeError: expected_k._equalsBoxedAndUnboxed(dispatchTable_[idx])
+name: aten::max.out
+SparsePrivateUse1: registered at torch_npu/csrc/aten/RegisterSparseNPU.cpp:177
+```
+
+**根因分析**:
+1. `VariableFallbackKernel.cpp:270` 为所有算子注册 `SparsePrivateUse1` fallback
+2. yaml 中 `sparse: [v2.1, newest]` 或 `sparse: op_api` 配置会生成具体的 sparse kernel 注册
+3. 两者导致同一 dispatch key 重复注册
+4. PyTorch 原生 `max.out` 等算子没有 sparse 实现，配置错误
+
+**修复步骤**:
+
+**步骤 1**: 从 yaml 中移除 sparse 配置
+
+```yaml
+# op_plugin/config/op_plugin_functions.yaml
+# 修改前
+- func: max.out(Tensor self, Tensor other, *, Tensor(a!) out) -> Tensor(a!)
+  sparse: [v2.1, newest]
+  acl_op: all_version
+  op_api: all_version
+
+# 修改后
+- func: max.out(Tensor self, Tensor other, *, Tensor(a!) out) -> Tensor(a!)
+  acl_op: all_version
+  op_api: all_version
+```
+
+```yaml
+# op_plugin/config/v2r7/op_plugin_functions.yaml
+# 修改前
+- func: max.out(Tensor self, Tensor other, *, Tensor(a!) out) -> Tensor(a!)
+  sparse: op_api
+  impl_ns: acl_op, op_api
+
+# 修改后
+- func: max.out(Tensor self, Tensor other, *, Tensor(a!) out) -> Tensor(a!)
+  impl_ns: acl_op, op_api
+```
+
+**步骤 2**: 删除生成的注册文件
+
+```bash
+rm -f torch_npu/csrc/aten/RegisterSparseNPU.cpp
+rm -f torch_npu/csrc/aten/RegisterNPU.cpp
+rm -f torch_npu/csrc/aten/RegisterAutogradNPU.cpp
+```
+
+**步骤 3**: 重新编译
+
+```bash
+bash ci/build.sh --python=3.10
+```
+
+**步骤 4**: 验证修复
+
+```bash
+pytest test/test_dispatch.py -v -k test_all_invariants
+```
+
+**适用算子**:
+- 常见于 `max.out`, `add.out` 等基础算子
+- 原则: PyTorch 原生无 sparse 实现的算子，torch_npu 不应配置 sparse
+
 ```cpp
 // Option 1: ensure aclops implementation exists
 DO_COMPATIBILITY(aclnnXxx, acl_op::xxx_npu(self, other));
