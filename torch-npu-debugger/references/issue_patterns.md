@@ -394,6 +394,7 @@ EZ9999 / error code = 0x800000
 | **torch.compile 兼容性** | `torch._dynamo.exc.Unsupported` | 找 `from user code` 调用栈，检查 torch_npu wrapper 是否有 side effect |
 | **ONNX Runtime bfloat16 不支持** | ONNX Runtime CPU backend 不支持 bfloat16 的 Add/Sub/Mul 等算术运算 | 检查测试是否使用了 bfloat16 算术运算，考虑跳过或修改测试 |
 | **onnx 包缺失** | PyTorch ONNX 功能依赖 onnx 包，缺失时导出失败 | `pip install onnx==1.17.0` |
+| **ONNX 与 protobuf 版本不兼容** | ONNX 1.17.0 与 protobuf 5.x+ 不兼容，导致 `strip_doc_string` 等函数报错 | 降级 protobuf: `pip install protobuf==4.25.3` 或升级 onnx >= 1.18.0 |
 
 ### 诊断步骤
 
@@ -523,7 +524,16 @@ torch_npu 报错
 │     │  ├─ 对比 PyTorch 官方：CPU 测试是否有此用例，CUDA 测试是否跳过
 │     │  ├─ 检查 onnx_test_common.py 中 backend 配置（硬编码 CPUExecutionProvider）
 │     │  └─ 添加 skipIfONNXRuntimeNoBFloat16 装饰器跳过测试
+│     ├─ "AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'" → ONNX 1.17.0 与 protobuf 5.x+ 不兼容
+│     │  └─ 降级 protobuf: `pip install protobuf==4.25.3` 或升级 onnx >= 1.18.0
 │     └─ 其他 ONNX Runtime 错误 → 检查 providers 列表，确认无 NPUExecutionProvider
+│
+│  └─ 测试文件缺失辅助模块
+│     ├─ "ModuleNotFoundError: No module named 'xxx'" (测试目录下) → 测试辅助文件未同步
+│     │  ├─ 检查测试文件是否从 PyTorch 同步，但缺少依赖的辅助模块
+│     │  ├─ 对比 PyTorch 官方 test/ 目录，复制缺失的 helper/verify/autograd_helper 等文件
+│     │  └─ 常见缺失文件: `autograd_helper.py`, `verify.py`, `onnx_test_common.py` 等
+│     └─ 测试用例引用外部资源失败 → 检查测试数据文件、模型定义文件是否完整同步
 │
 └─ 精度问题
    ├─ 全零/全 NaN → 算子执行异常或 format 错误

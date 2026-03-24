@@ -673,3 +673,114 @@ from pytorch_test_common import (
 **参考**:
 - ONNX Runtime Execution Providers: https://onnxruntime.ai/docs/execution-providers/
 - PyTorch 官方行为：PyTorch CUDA 测试在 `BFloat16 CUDA is not available` 时跳过
+
+### 12.2 ONNX 与 protobuf 版本不兼容
+
+**问题**: ONNX 测试运行时报错：
+```
+AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+```
+
+**根因**: ONNX 1.17.0 与 protobuf 5.x+ 不兼容，`onnx.helper.strip_doc_string` 等函数依赖已移除的 protobuf API。
+
+**修复方案**: 降级 protobuf 或升级 onnx。
+
+```bash
+# 方案1：降级 protobuf 到兼容版本（推荐）
+pip install protobuf==4.25.3
+
+# 方案2：升级 onnx 到修复版本
+pip install onnx>=1.18.0
+```
+
+**验证修复**:
+```python
+import onnx
+import io
+from onnx import helper
+
+# 测试 strip_doc_string 是否正常工作
+model = onnx.ModelProto()
+helper.strip_doc_string(model)
+print("strip_doc_string: OK")
+```
+
+**适用场景**:
+- `test_utility_funs.py` 中的 `test_verbose` 等使用 `strip_doc_string` 的测试
+- 任何调用 `onnx.helper.strip_doc_string` 的代码
+- 升级 protobuf 后 ONNX 相关功能异常
+
+**排查要点**:
+1. 检查 onnx 版本：`python -c "import onnx; print(onnx.__version__)"`
+2. 检查 protobuf 版本：`python -c "import google.protobuf; print(google.protobuf.__version__)"`
+3. 测试 `strip_doc_string` 是否正常工作
+4. ONNX 1.17.0 + protobuf 5.x+ 组合必然触发此错误
+
+---
+
+## 13. 测试辅助文件缺失修复
+
+### 13.1 测试文件同步时缺失辅助模块
+
+**问题**: 运行测试时报错：
+```
+ModuleNotFoundError: No module named 'autograd_helper'
+ModuleNotFoundError: No module named 'verify'
+```
+
+**根因**: 测试文件 `test_xxx.py` 从 PyTorch 同步时，未同步其依赖的辅助模块（如 `autograd_helper.py`, `verify.py` 等）。
+
+**修复方案**: 从 PyTorch 官方仓库复制缺失的辅助文件。
+
+**步骤**:
+
+1. **确定缺失文件**: 根据报错信息确定缺失的模块名。
+
+2. **查找 PyTorch 官方文件位置**:
+```bash
+# 在 PyTorch 源码中搜索
+grep -r "from autograd_helper" pytorch/test/
+grep -r "from verify" pytorch/test/
+
+# 或直接查看测试文件导入
+head -30 pytorch/test/onnx/test_utility_funs.py
+```
+
+3. **复制缺失文件到 torch_npu**:
+```bash
+# 常见缺失文件
+pytorch/test/onnx/autograd_helper.py  -> torch_npu/test/onnx/
+pytorch/test/onnx/verify.py           -> torch_npu/test/onnx/
+pytorch/test/onnx/onnx_test_common.py -> torch_npu/test/onnx/
+```
+
+4. **验证修复**:
+```bash
+cd torch_npu/test/onnx
+python -c "import autograd_helper; import verify; print('All modules imported successfully')"
+
+# 运行原测试
+python test_utility_funs.py -v -k test_verbose
+```
+
+**常见缺失文件清单**:
+
+| 文件 | 用途 | 常见于 |
+|------|------|--------|
+| `autograd_helper.py` | 自定义 autograd 函数测试 | `test_utility_funs.py` |
+| `verify.py` | ONNX 模型验证工具 | `test_utility_funs.py` |
+| `onnx_test_common.py` | ONNX 测试公共基类 | 多个 ONNX 测试文件 |
+| `pytorch_test_common.py` | PyTorch 测试公共工具 | 多个测试文件 |
+
+**预防措施**:
+
+同步 PyTorch 测试文件时，检查文件头部的所有 `from xxx import` 和 `import xxx` 语句，确保依赖的辅助模块也被同步。
+
+**长期解决方案**:
+
+1. **建立同步检查脚本**: 自动化检查测试文件的依赖完整性
+2. **维护同步文档**: 记录每个同步测试文件的依赖关系
+3. **CI 检查**: 在 CI 中运行所有测试，确保无模块缺失错误
+
+**参考**:
+- PyTorch 官方 test/onnx 目录: https://github.com/pytorch/pytorch/tree/main/test/onnx
