@@ -1,0 +1,11 @@
+# Remote operation dependencies
+paramiko>=3.0.0
+
+# Optional: for enhanced SSH operations
+# fabric>=3.0.0
+
+# Development dependencies (optional)
+# pytest>=7.0.0
+# pytest-asyncio>=0.21.0
+# black>=23.0.0
+# mypy>=1.0.0

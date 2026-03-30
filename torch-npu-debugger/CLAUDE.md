@@ -19,6 +19,25 @@ references/
   issue_patterns.md             # Problem classification (12 categories) and quick decision tree
   fix_patterns.md               # Fix templates by component (ACLNN, format, dtype, registration, ATB, version, etc.)
   debugging_tools.md            # Built-in debugging tools guide (OpHook, NPU Trace, dump, overflow, ATB logs)
+remote/                         # Remote server operation modules
+  core/                         # Core SSH and execution modules
+    session_manager.py          # RemoteSessionManager: SSH connection management
+    command_executor.py         # RemoteCommandExecutor: sync/async command execution
+    file_manager.py             # RemoteFileManager: file upload/download/operations
+    exceptions.py               # Custom exception classes
+  git/                          # Git operations module
+    git_operator.py             # RemoteGitOperator: remote git commands
+  analysis/                     # Result analysis modules
+    result_analyzer.py          # ResultAnalyzer: unified analysis interface
+    compile_analyzer.py         # CompileAnalyzer: build log analysis
+    test_analyzer.py            # TestAnalyzer: pytest output analysis
+  environment/                  # Environment detection
+    detector.py                 # EnvironmentDetector: CANN/Python/NPU detection
+  models/                       # Data models
+    data_models.py              # Dataclasses for results and status
+  utils/                        # Utility functions
+    ssh_utils.py                # SSH helper functions
+    parsers.py                  # Output parsers
 scripts/
   sync-to-server.sh             # Rsync script for remote deployment
 ```
@@ -40,6 +59,10 @@ Operator source lives in two layers:
 - `torch_npu/csrc/core/npu/` — NPUCachingAllocator, NPUStream, ACL interface (runtime layer)
 - `third_party/op-plugin/op_plugin/ops/opapi/` — ACLNN operator implementations (new path)
 - `third_party/op-plugin/op_plugin/ops/aclops/` — ACL operator implementations (old path)
+
+## Remote Server Operations
+
+Use `scripts/sync-to-server.sh` to sync code to the Ascend server for compilation and testing.
 
 ## Editing Guidelines
 

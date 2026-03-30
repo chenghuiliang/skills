@@ -215,6 +215,24 @@ NPU 使用私有张量格式以优化计算性能：
 | **dtype 不支持** | aclnn 算子不支持某种 dtype | 添加 dtype 转换或 fallback |
 | **CANN 版本不兼容** | 新 aclnn 接口在旧 CANN 上不存在 | 使用 DO_COMPATIBILITY 宏 |
 | **ACLNN / ACLOP 语义不一致** | CPU 语义明确、ACLOP 正常，但 ACLNN 在同场景报错或行为不同 | 对比 opapi/aclops 同名算子的 shape 推导、dim 处理、keepdim 处理与 fallback 路径 |
+| **参数值约束不匹配** | ACLNN 对特定参数组合有约束（如 p=2 时 compute_mode 必须为 0） | 检查 yaml 配置中的参数计算逻辑，对比 ACLNN 接口约束 |
+
+### 典型参数约束错误
+
+**错误模式**: `AclNN_Parameter_Error(EZ1001): compute_mode X is not supported, only support Y when pValue equals Z`
+
+**根因**: yaml 配置中的参数计算逻辑与 ACLNN 接口约束不匹配。
+
+**案例**: cdist 算子在 p=2 时，原代码设置 compute_mode=2，但 ACLNN 只支持 compute_mode=0。
+
+**修复**: 修改 `op_plugin_functions.yaml` 中的参数计算逻辑：
+```yaml
+# 修改前
+mode: 'std::abs(p - 2.0) < 1e-6 ? 2 : compute_mode.value_or(0)'
+
+# 修改后
+mode: 'std::abs(p - 2.0) < 1e-6 ? 0 : compute_mode.value_or(0)'
+```
 
 ### 诊断步骤
 
@@ -519,6 +537,8 @@ torch_npu 报错
 │  │
 │  ├─ "ACL_ERROR_*" / "EZ9999" → ACLNN 执行错误
 │  │  ├─ 161002 + CheckAxisRange/CheckShapeValid → opapi 层 infershape 错误
+│  │  ├─ 161002 + EZ1001 + "compute_mode X is not supported" → ACLNN 参数值约束错误
+│  │  │  └─ 检查 yaml 中参数计算逻辑，对比 ACLNN 接口约束（如 cdist p=2 时 mode 必须为 0）
 │  │  ├─ 0x800000 MTE 越界 → 检查 gen_opapi 的 out dtype 配置
 │  │  ├─ CPU 正常 + ACLOP 正常 + ACLNN 异常 → 优先判定 ACLNN / ACLOP 语义不一致
 │  │  ├─ 多框架共卡 → 用 ASCEND_RT_VISIBLE_DEVICES 隔离

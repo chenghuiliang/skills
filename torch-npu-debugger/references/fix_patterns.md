@@ -59,6 +59,38 @@ EXEC_NPU_CMD(aclnnXxx, self, other, result);
 EXEC_NPU_CMD(aclnnXxx, self, other, alpha, result);
 ```
 
+### 1.2a 修复 ACLNN 参数值约束不匹配
+
+**问题**: ACLNN 接口对参数值有特定约束（如特定条件下参数必须为特定值），yaml 配置生成的参数值违反约束。
+
+**典型错误**:
+```
+AclNN_Parameter_Error(EZ1001): compute_mode 2 is not supported, only support 0 when pValue equals 2.0
+```
+
+**修复**: 修改 `op_plugin_functions.yaml` 中的参数计算逻辑，对齐 ACLNN 约束。
+
+```yaml
+# File: op_plugin/config/op_plugin_functions.yaml
+
+# Before: violates ACLNN constraint
+- func: cdist(Tensor x1, Tensor x2, float p=2, int? compute_mode=None) -> Tensor
+  gen_opapi:
+    new_params:
+      mode: 'std::abs(p - 2.0) < 1e-6 ? 2 : compute_mode.value_or(0)'
+
+# After: align with ACLNN constraint
+- func: cdist(Tensor x1, Tensor x2, float p=2, int? compute_mode=None) -> Tensor
+  gen_opapi:
+    new_params:
+      mode: 'std::abs(p - 2.0) < 1e-6 ? 0 : compute_mode.value_or(0)'
+```
+
+**关键检查点**:
+- 当 p=2 时，ACLNN 的 `aclnnCdist` 只支持 `compute_mode=0`
+- 检查 yaml 中的参数计算逻辑是否与 ACLNN 头文件中的约束一致
+- 涉及 `_cdist_forward` 和 `cdist` 两个函数配置
+
 ### 1.3 添加 Workspace 处理
 
 **问题**: ACLNN 算子需要额外 workspace 但未分配。

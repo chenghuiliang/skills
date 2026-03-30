@@ -233,9 +233,10 @@ class TestXxxOp:
 1. **定位总结（必选）**
    - 使用中文书写
    - 至少包含：问题现象、复现方式、定界结论、根因分析、修复/规避方案、验证结果、最终结论
-2. **代码 diff（推荐）**
+2. **代码 diff（必选）**
    - 保存本次改动的补丁或 diff 文件
    - 便于远端同步、代码复查、后续 cherry-pick 或回溯
+   - 生成命令：`git diff > code_changes.diff`
 3. **问题单材料（当发现底层缺陷时必选）**
    - 若最终结论指向 ACLNN / CANN / 驱动等底层问题，应额外整理：
      - 详细问题单模板
@@ -334,4 +335,166 @@ ssh user@server "cd /home/lch/work && source env_ms.sh mindspore/ && cd torch_np
 
 ```bash
 ssh user@server "while ps -p {PID} > /dev/null 2>&1; do sleep 30; echo 'building...'; done; echo 'done'"
+```
+
+---
+
+## Python 远程操作 API
+
+除了手动 SSH 命令外，skill 还提供了 Python API 用于程序化远程操作。
+
+### 基础连接
+
+```python
+from remote.core.session_manager import RemoteSessionManager
+from remote.core.command_executor import RemoteCommandExecutor
+from remote.core.file_manager import RemoteFileManager
+
+# Connect to remote server
+session = RemoteSessionManager("dev@server", key_path="~/.ssh/id_rsa")
+
+# Execute commands
+executor = RemoteCommandExecutor(session, default_env_setup="source ~/work/env_ms.sh")
+result = executor.execute_sync("ls -la", working_dir="~/torch_npu")
+
+# File operations
+file_mgr = RemoteFileManager(session)
+file_mgr.upload("local/file.txt", "/remote/path/file.txt")
+```
+
+### 异步编译与测试
+
+```python
+# Start async compilation
+task = executor.execute_async(
+    "bash ci/build.sh --python=3.9",
+    working_dir="~/torch_npu",
+    timeout=3600
+)
+
+# Check status
+status = executor.get_async_status(task.task_id)
+print(f"State: {status.state}, Progress: {status.progress}")
+
+# Wait for completion with progress callback
+def on_progress(status):
+    print(f"[{status.state}] {status.message or ''}")
+
+result = executor.wait_for_async(task.task_id, progress_callback=on_progress)
+```
+
+### Git 操作
+
+```python
+from remote.git.git_operator import RemoteGitOperator
+
+git = RemoteGitOperator(session)
+
+# Check status
+status = git.status("~/torch_npu")
+print(f"Branch: {status.branch}, Modified: {len(status.modified_files)}")
+
+# Apply and commit patch
+file_mgr.apply_patch(patch_content, "~/torch_npu")
+git.commit("~/torch_npu", "Fix operator bug", files=["modified/file.cpp"])
+```
+
+### 结果分析
+
+```python
+from remote.analysis.result_analyzer import ResultAnalyzer
+
+analyzer = ResultAnalyzer()
+
+# Analyze compile result
+compile_analysis = analyzer.analyze_compile_result(compile_result)
+if not compile_analysis.success:
+    print(f"Errors: {compile_analysis.error_count}")
+    for suggestion in compile_analysis.suggestions:
+        print(f"Suggestion: {suggestion}")
+
+# Analyze test result
+test_analysis = analyzer.analyze_test_result(test_result)
+print(f"Passed: {test_analysis.passed}/{test_analysis.total_tests}")
+for test in test_analysis.failed_tests:
+    print(f"Failed: {test}")
+```
+
+### 环境检测
+
+```python
+from remote.environment.detector import EnvironmentDetector
+
+detector = EnvironmentDetector(session)
+
+# Detect all environment info
+env_info = detector.detect_all()
+print(f"CANN: {env_info['cann_version']}")
+print(f"Python: {env_info['python_version']}")
+print(f"NPU Devices: {len(env_info['npu_devices'])}")
+
+# Check torch_npu import
+success, error = detector.check_torch_npu_import()
+if not success:
+    print(f"Import failed: {error}")
+```
+
+### 完整验证流程示例
+
+```python
+from remote.core.session_manager import RemoteSessionManager
+from remote.core.command_executor import RemoteCommandExecutor
+from remote.core.file_manager import RemoteFileManager
+from remote.git.git_operator import RemoteGitOperator
+from remote.analysis.result_analyzer import ResultAnalyzer
+from remote.models.data_models import VerificationResult
+
+def remote_verify(
+    session: RemoteSessionManager,
+    patch_content: str,
+    test_target: str,
+    remote_work_dir: str
+) -> VerificationResult:
+    """Complete remote verification workflow."""
+
+    executor = RemoteCommandExecutor(
+        session,
+        default_env_setup="source ~/work/env_ms.sh",
+        default_working_dir=remote_work_dir
+    )
+    file_mgr = RemoteFileManager(session)
+    git = RemoteGitOperator(session)
+    analyzer = ResultAnalyzer()
+
+    # 1. Apply patch
+    file_mgr.apply_patch(patch_content, remote_work_dir)
+
+    # 2. Compile
+    compile_task = executor.execute_async(
+        "bash ci/build.sh --python=3.9",
+        timeout=3600
+    )
+    compile_result = executor.wait_for_async(compile_task.task_id)
+    compile_analysis = analyzer.analyze_compile_result(compile_result)
+
+    if not compile_analysis.success:
+        return VerificationResult(
+            success=False,
+            stage="compile",
+            compile_analysis=compile_analysis
+        )
+
+    # 3. Run tests
+    test_result = executor.execute_sync(
+        f"pytest {test_target} -v",
+        timeout=600
+    )
+    test_analysis = analyzer.analyze_test_result(test_result)
+
+    return VerificationResult(
+        success=test_analysis.success,
+        stage="test",
+        compile_analysis=compile_analysis,
+        test_analysis=test_analysis
+    )
 ```
