@@ -1,0 +1,63 @@
+{
+  "total_files": 154,
+  "parsed_issues": 154,
+  "with_root_cause": 97,
+  "with_stack_trace": 20,
+  "top_labels": {
+    "feature": 52,
+    "task": 43,
+    "runtime": 22,
+    "cluster-manager": 14,
+    "pynative": 13,
+    "ops": 11,
+    "compiler-backend": 11,
+    "test": 10,
+    "minddata": 10,
+    "compiler-frontend": 9,
+    "high-available": 8,
+    "profiler/dump-tools": 6,
+    "RFC": 6,
+    "device/ascend": 4,
+    "bug": 4,
+    "gitee": 3,
+    "CICD": 3,
+    "attr/function": 2,
+    "infer": 2,
+    "non-compute-api": 1,
+    "demo": 1,
+    "kind/usability": 1,
+    "mindspore-assistant": 1,
+    "foruda": 1,
+    "intern-task-rewiew": 1,
+    "parallel": 1,
+    "mindspore-lite": 1
+  },
+  "issue_types": {
+    "需求": 5,
+    "Task-Tracking": 20,
+    "任务": 102,
+    "RFC": 13,
+    "Bug-Report": 3,
+    "": 4,
+    "Documentation": 3,
+    "Bug": 2,
+    "Requirement": 2
+  },
+  "error_keywords": {
+    "精度": 34,
+    "shape": 45,
+    "算子": 81,
+    "编译": 73,
+    "梯度": 31,
+    "dtype": 153,
+    "性能": 46,
+    "内存": 51,
+    "死锁": 34,
+    "崩溃": 2
+  },
+  "backend_distribution": {
+    "Ascend": 128,
+    "GPU": 108,
+    "CPU": 110
+  }
+}

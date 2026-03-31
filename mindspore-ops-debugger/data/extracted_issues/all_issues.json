@@ -1,0 +1,2163 @@
+[
+  {
+    "issue_id": "42119",
+    "title": "[Bug]: 兼容性deepseek3网络，断点续训精度对不齐-org-issues-AtomGit | GitCode",
+    "issue_type": "",
+    "status": "",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42168",
+    "title": "[Bug]: 【MindFormers】【B版本】is legacy model()逻辑变更导致用例批量报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42178",
+    "title": "[Bug]: 【MindFormers】【模型】【性能】deepseekv3减层8p训练任务性能劣化超20%-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42129",
+    "title": "[Bug]: 单机验证pipeline,使用global norm算法, dp=1,开启优化器并行+多副本, 使用@lazy inline报错：TypeError: 'module' object is not callable-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42179",
+    "title": "[Bug]: 【MindFormers】【模型】【性能】test mf seqpp llama3 1 8b perf训练任务性能劣化超20%-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42118",
+    "title": "[Bug]:[TP] world size=8,timeout=timedelta(seconds=2)，wait for workers=True, 时时间不足以支撑大数据量, 偶现core-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "runtime"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42166",
+    "title": "[Bug]: if while for中使用常量tensor，反向报错RuntimeError: Can't access data on Ascend-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41954",
+    "title": "[Bug]:ops.expm1/ops.log1p报错RuntimeError: When convert scalar to tensor, the scalar type: Complex128/Complex64 is invalid.-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41960",
+    "title": "【自提单】【MindFormers】【Mcore】静态图YarnRotaryEmbedding初始化与父类入参无法对应，初始化顺序有误-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "7944",
+      "7944",
+      "7943",
+      "7943"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41931",
+    "title": "[Bug]:mint.nn.Linear fp32 910b偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41921",
+    "title": "【自提单】【MIndformers】【训练】动态图attention中含有transformer config中已经删除的参数导致训练报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "7978",
+      "7978"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41970",
+    "title": "[Bug]mindone transformers下的modeling clip训练精度概率性不达标-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41944",
+    "title": "【自提单】【MindFormers】训练前向推理开启pp并行时报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "7909",
+      "7909",
+      "7965",
+      "7965"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42142",
+    "title": "[Bug]: 2.8.0安装部署资料问题，样例版本错误-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42220",
+    "title": "[Bug]: DVM无图融合CV融合的控制流场景精度报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42185",
+    "title": "[Bug]: 门禁用例失败：test ascend control sink.py::test mixed while if 等用例，报错：TypeError: 'module' object is not callable.-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42191",
+    "title": "[Bug]: doctest仓用例报错：free(): invalid pointer-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "dtype",
+      "崩溃"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42311",
+    "title": "[Bug]: [自提单]model runner ut修复-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41935",
+    "title": "[Bug]:O1, 自动并行，8p模式，SplitFlattenMulDenseConstantNet， 偶现core在SetMsInternalEnableCustomKernelList-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "attr/function",
+      "bug",
+      "infer",
+      "kind/occasionally",
+      "sig/llm-inference"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "崩溃"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41950",
+    "title": "[Bug]ascend910B4环境上unet conv3d.onnx使能aoe转换生成mindir模型后推理性能劣化-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "bug",
+      "kind/cann"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41940",
+    "title": "[Bug]: 门禁用例报错test clamp.py::test clamp overload error report[1]-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91442",
+      "91442"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41974",
+    "title": "[Bug]:nn.Conv2d fp16偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41925",
+    "title": "[Bug]python3.12，mindone diffusers下的generic modules部分模型训练精度不达标-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42181",
+    "title": "[Bug]: deepseek-mcore网络，dp2mp2pp4ep4bs1mb8gas1并行策略，网络训练，显存超标，peak memory:356 is large than 313.95-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42210",
+    "title": "[Bug]: mindyolo yolov5 算力切分场景训练失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42117",
+    "title": "【自提单】【MindFormers】【pynative】TransformerLayer与TransformerBlock接口缺少精度用例-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "7983",
+      "7983"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42297",
+    "title": "[Bug]: [mint.prod]反向计算有问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "REJECTED",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42132",
+    "title": "[Bug]: mindone transformers模型训练报错AttributeError: module 'mindspore.ops' has no attribute 'Tensor'-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42163",
+    "title": "[Bug]: floormod fp16偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "REJECTED",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41934",
+    "title": "[Bug]:nn.adam ascend后端计算结果与标杆不一致-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41965",
+    "title": "[Bug]: 门禁用例报错test qwen3 dryrun.py::test qwen3 cell dp2mp4pp2vpp4op 1f1b,test qwen3 dryrun.py::test qwen3 dp4mp4pp1op recompute-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41951",
+    "title": "[Bug]:构造GetNext动态shape网络多次执行的场景,用例执行时间从十分钟内涨至15分钟以上，导致用例被杀-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "kind/cann",
+      "test/smoke"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41941",
+    "title": "[Bug][兼容性测试]:infer类推理算子报错The current operator needs to be supplemented with an adapter.-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41975",
+    "title": "[Bug]: ops.renorm ascend后端正向存在精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "kind/cann"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41924",
+    "title": "[Bug]:msrun rank id重排失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42180",
+    "title": "[Bug]: deepseek-mcore网络，dp2mp2pp4ep4bs1mb8gas1并行策略，网络训练，性能劣化，FPS is 1540 less than 1616.9-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42116",
+    "title": "[Bug]:tensor.mul 参数other类型校验丢失-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42136",
+    "title": "[Bug]: jit特性交互，异构+输出tuple,比较两次执行图编译时间,第二次比较时校验后端编译时间偶现失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41904",
+    "title": "[BUG][OPS] CANN包升级8.5 0116, mint.sqrt反向连续求导出现异常值-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41955",
+    "title": "[Bug]:官网样例mindspore.ops.nsa compress attention报错TypeError: nsa compress attention() takes 9 positional arguments but 14 were given-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41961",
+    "title": "[Bug]:O1 matmul 半自动并行 输入策略：[a, b], [b, c]， 输出策略：[a, c*b]， 偶现core-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91422",
+      "91422"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41930",
+    "title": "[Bug]:imod的input和other是5维时，正向e2e性能没有达到标杆的1.2倍-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41920",
+    "title": "[Bug]:mint.atan2 fp16偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41971",
+    "title": "[Bug]:ops.scatternd pynative模式参数校验丢失-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41945",
+    "title": "[Bug]:自定义算子asdfft在旧CANN包报错找不到libasdsip.so路径-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91424",
+      "91424"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42143",
+    "title": "[Bug]: 2.8.0安装部署资料问题，多了CPU docker安装资料-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42283",
+    "title": "[Bug]: 2.2版本mindspore导出的mindir在2.3版本上修改，并加载报Fatal Python error: Segmentation fault-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "REJECTED",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42126",
+    "title": "[Bug]mindone diffusers下的I2VGenXLUNet模型训练精度不达标-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42184",
+    "title": "[Bug]: deepseek sft 网络加载权重时报错：RuntimeError: Error(s) in loading state dict for GPTModel-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42154",
+    "title": "[Bug]: 【自提单】num floating point operations接口需要补充ut用例-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "42160",
+    "title": "[Bug]: ops.exp2 fp16偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41966",
+    "title": "[Bug]:半自动并行，unified safetensors+pp stage共享权重+优化器并行+权重聚合， 偶现core-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "kind/cann"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41937",
+    "title": "[Bug]:nn.sgd ascend报错Memcpy async failed, stream is not in current ctx-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41952",
+    "title": "[Bug]:TensorDump位于网络中间位置, 且在循环外, 半自动并行, net中存在循环, mode设置为\"all\" 偶现core-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41942",
+    "title": "[Bug]: 版本用例执行失败：test hal memory.py::test runtime max memory allocated-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41913",
+    "title": "[Bug]: 门禁用例报错test ops group cases.py::test reduction op group case level0,test ops group cases.py::test unary op group case level0-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41927",
+    "title": "[Bug]:mindone开启编译缓存报错：SetScalarToAttributeProto ir] Unsupported scalar type: FP16Imm-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "mindir"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41976",
+    "title": "[Bug]:lite删除minddata相关内容后，端侧使用RunStep方式时build报错Unsupported parameter type in Create : BinaryCrossEntropyGrad-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42183",
+    "title": "[Bug]: deepseek pretrain 网络加载权重时训练失败，报错：AssertionError: transformer engine does not support ascend coc-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42212",
+    "title": "[Bug]: msrun启动--bind numa参数传入不存在路径报错msrun: error: argument --bind numa-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42115",
+    "title": "AtomGit | GitCode - 全球开发者的开源社区,开源代码托管平台}",
+    "issue_type": "",
+    "status": "",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "性能"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "42150",
+    "title": "[Bug]: 【自提单】【MindFormers】ReshardLoader补充UT用例-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "kind/developertest"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41956",
+    "title": "[Bug]:门禁用例失败：test nsa compress attention.py::test nsa compress attention dynamic shape TEST OP 报错：AssertionError-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91409",
+      "91409"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41933",
+    "title": "[Bug]:CPU后端trace算子偶现精度异常，固定--randomly-seed=1767963664必现精度异常-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41962",
+    "title": "[Bug]:ranktable启动用例报错MindSpore does not support ranktable startup, please use msrun to start it.， 已废弃，但是资料未修改-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91410",
+      "91410"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41972",
+    "title": "[Bug]:mint.nn.functional.embedding/mint.nn.Embedding ascend存在精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41946",
+    "title": "[Bug] 盘古 38bv3网络，训练失败报错：AttributeError: 'NoneType' object has no attribute 'item'-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "log/lose"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42247",
+    "title": "[Bug]: pylint filter-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "TODO",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42174",
+    "title": "[Bug]: 图算融合O1没走进图算，融合失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41932",
+    "title": "[Bug]:ops.pow fp32存在精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41963",
+    "title": "[Bug]:model zoo CV 类 yolov5s 网络模型训练验证训练性能、loss是否达标,用例执行超时-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41973",
+    "title": "[Bug]:mint.nn.PixelShuffle 报错 RuntimeError: Invalid abstract;AbstractProblem-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41922",
+    "title": "动态图rope utils仅与静态图pynative分支对齐精度，未与静态图master分支对齐-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "7979",
+      "7979"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41916",
+    "title": "[Bug]:torch对标性能看护: 虚拟内存 torch/ms分别执行10次，取执行时间、释放的内存均值比较,比较失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41947",
+    "title": "[Bug] 盘古vlm网络 开确定性 8p，训练失败报错：RuntimeError: Lazy Async copy failed. -org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42332",
+    "title": "[Bug]: 【MindFormers】【冒烟】MindFormers MFPipelineWithLossScaleCell接口报错AttributeError: MFPipelineWithLossScaleCell: 'NoneType' object has no attribute 'experimental attention variant'-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "TODO",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42155",
+    "title": "[Bug]: allgather InnerCommAllReduce 等通信报错，不支持complex64-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41967",
+    "title": "[Bug]:acosh算子设置01，并将设置和不设置context.set context(graph kernel flags=\"--disable expand ops=AcoshExt\")的图对比，反向传播计算时报错RuntimeError: Unknown scalar type 1-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41936",
+    "title": "[Bug]:门禁用例失败：test jacfwd.py::test jac multiple inputs multiple outputs cell graph[0]等用例， 报错：ValueError: For 'Select', condition.shape and input.shape need to broadcast. -org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41943",
+    "title": "[Bug]:Cell实例中使用属性引用异常场景，非Parameter类型数据修改（syntax white list）, 报错RuntimeError: Output idx 0 of node @kernel graph2:CNode 5{[0]: ValueNode<Primitive> PrimFunc Assign-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91448",
+      "91448"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41926",
+    "title": "[Bug]:部分进程创建通信组用例因为python升级超时报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41977",
+    "title": "[Bug]deepseek网络，eod泛化场景，并行策略dp1mp1pp16ep1bs1mb16gas1，跑测版本和以往版本，相同场景，loss绝对误差和norm相对误差超0；跑测版本相同版本，确定性可以固定住-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42182",
+    "title": "[Bug]: deepseek-mcore网络，dp2mp2pp4ep4bs1mb8gas1并行策略，网络训练，确定性误差超0，mean absolute error:0.0003077779999999919 is large than 0-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42227",
+    "title": "[Bug]: fusedadamw算子报错：TypeError: unsupported operand type(s) for +=: 'NoneType' and 'ParameterTuple'-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42145",
+    "title": "[Bug]: Morph内部调用的函数包含*args, **kwargs入参时报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42285",
+    "title": "[Bug]: resnet50单卡训练中插入format训练报错TypeError: 'bool' object is not iterable-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "REJECTED",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41958",
+    "title": "[Bug]:linux aarch64+ascend910b，python310环境。Build时配置的卡和Tensor的卡ID不一致，推理输出卡ID变为Tensor卡ID，跨卡推理失败。-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42199",
+    "title": "[Bug]: mindyolo yolov8n网络ckpt转onnx报错ExportPrimitive] Can not find key Divs in convert map. Exporting Divs operator is not yet supported.-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "42249",
+    "title": "[Bug]: tensor.masked fill kernel性能多调用算子了(copy from 42113)-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "REJECTED",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41948",
+    "title": "[Bug]:自定义算子在旧CANN包执行报错RuntimeError: Error building extension 'my ops'-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91399",
+      "91399"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41919",
+    "title": "[Bug]:通信算子get group size输入参数为不匹配的字符串，报错类型由runtime改为valueerror-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41939",
+    "title": "[Bug][兼容性测试]:nn.Hardtanh报错超时-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41968",
+    "title": "[Bug]:mint.nn.Linear fp16 910a偶现精度问题-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41929",
+    "title": "[Bug]:使用 AlexNet，加载 onnx 模型,运行并比较结果,偶现nan值-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41938",
+    "title": "[Bug]: 用例deepseek v3网络，双机16卡，加载分布式权重的时候网络训练失败 报错：给到runtime的tensor设备类型不符合预期-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91482",
+      "91482",
+      "91496",
+      "91496"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41969",
+    "title": "[Bug]:linux x86 64 cpu环境编译lite encrypt pre inference版本包，报错找不到头文件#include \"nlohmann/json.hpp\"-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "bug",
+      "ci-pipeline-passed",
+      "mindspore-cla/yes",
+      "sig/ms-lite"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41908",
+    "title": "【回黄每日构建】【MindFormers】【功能模块】L0-test parallel linear.py::TestParallelLinear::test parallel linear quantization 和 L0-test gpt weight consistency.py::test weight consistency check 用例失败-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41959",
+    "title": "Morph内部调用的函数包含*args, **kwargs入参时报错-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend"
+    ],
+    "related_prs": [
+      "91387",
+      "91387"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41949",
+    "title": "[Bug]: 门禁用例报错test functional method.py::test method too many parameters tests/st/compiler/functional overload-org-issues-AtomGit | GitCode",
+    "issue_type": "Bug-Template",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91392",
+      "91392"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "41918",
+    "title": "change the code owner of frontend code-org-issues-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91556",
+      "91556",
+      "91556",
+      "91556"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  }
+]

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A Claude Code skill (`SKILL.md`) for diagnosing and fixing torch_npu operator bugs. It's a documentation-only skill — no build system, no tests, no runtime.
+A lightweight Claude Code skill (`SKILL.md`) for diagnosing and fixing torch_npu operator bugs. Pure documentation-based skill with checkpoint enforcement — no runtime processes, no background agents.
 
 ## Skill Activation
 
@@ -13,44 +13,36 @@ The skill triggers on keywords related to torch_npu operator issues: NPU operato
 ## Repository Structure
 
 ```
-SKILL.md                        # Skill definition, trigger conditions, and 6-step workflow
-references/
-  architecture.md               # Source code navigation: two-layer architecture and path patterns
-  issue_patterns.md             # Problem classification (12 categories) and quick decision tree
-  fix_patterns.md               # Fix templates by component (ACLNN, format, dtype, registration, ATB, version, etc.)
-  debugging_tools.md            # Built-in debugging tools guide (OpHook, NPU Trace, dump, overflow, ATB logs)
-remote/                         # Remote server operation modules
-  core/                         # Core SSH and execution modules
-    session_manager.py          # RemoteSessionManager: SSH connection management
-    command_executor.py         # RemoteCommandExecutor: sync/async command execution
-    file_manager.py             # RemoteFileManager: file upload/download/operations
-    exceptions.py               # Custom exception classes
-  git/                          # Git operations module
-    git_operator.py             # RemoteGitOperator: remote git commands
-  analysis/                     # Result analysis modules
-    result_analyzer.py          # ResultAnalyzer: unified analysis interface
-    compile_analyzer.py         # CompileAnalyzer: build log analysis
-    test_analyzer.py            # TestAnalyzer: pytest output analysis
-  environment/                  # Environment detection
-    detector.py                 # EnvironmentDetector: CANN/Python/NPU detection
-  models/                       # Data models
-    data_models.py              # Dataclasses for results and status
-  utils/                        # Utility functions
-    ssh_utils.py                # SSH helper functions
-    parsers.py                  # Output parsers
+SKILL.md                        # Skill definition, trigger conditions, and 6-step workflow with checkpoints
+CLAUDE.md                       # This file: project guidance
+references/                     # Domain knowledge base (core value)
+  architecture.md               # torch_npu architecture and path navigation
+  issue_patterns.md             # 12 problem categories and decision tree
+  fix_patterns.md               # Fix templates by component
+  debugging_tools.md            # Debugging tools guide
 scripts/
+  workflow_guard.py             # Checkpoint enforcement script (<200 lines)
   sync-to-server.sh             # Rsync script for remote deployment
+.workflow/                      # Workflow state tracking (auto-created)
+  checkpoints.json              # Checkpoint completion records
+archive/                        # Archived multi-agent implementation (backup)
+  multi_agent/                  # Previous multi-agent system
+  workflow/                     # Previous workflow engine
 ```
 
 ## Skill Workflow
 
-The skill guides through 6 steps:
-1. **Problem Analysis** — collect error info, environment, reproduction steps
-2. **Scoping (定界)** — identify which layer has the issue (registration/ACLNN/format/runtime)
-3. **Localization (定位)** — navigate to specific source files using path patterns in `architecture.md`
-4. **Fixing** — apply minimal targeted changes using patterns from `fix_patterns.md`
-5. **Regression Verification** — compile and test on remote Ascend server
-6. **Test Supplementation** — add test cases covering the bug scenario
+The skill guides through 6 steps with mandatory checkpoints:
+
+1. **Problem Analysis** → checkpoint: `problem_analyzed`
+2. **Scoping (定界)** → checkpoint: `scope_identified`
+3. **Localization (定位)** → checkpoint: `code_located`
+4. **Fixing** → checkpoint: `fix_applied`
+5. **Regression Verification** → checkpoint: `regression_verified` (MANDATORY)
+6. **Test Supplementation** → checkpoint: `test_added` (MANDATORY)
+7. **Artifacts Archiving** → checkpoint: `artifacts_archived` (MANDATORY)
+
+Mandatory checkpoints cannot be skipped. Use `scripts/workflow_guard.py` to enforce completion.
 
 ## torch_npu Source Layout (external, referenced by skill)
 
@@ -62,7 +54,18 @@ Operator source lives in two layers:
 
 ## Remote Server Operations
 
-Use `scripts/sync-to-server.sh` to sync code to the Ascend server for compilation and testing.
+Use `scripts/sync-to-server.sh` to sync code to the Ascend server, then execute commands via ssh:
+
+```bash
+# Sync code
+./scripts/sync-to-server.sh
+
+# Compile on remote server (in Docker container)
+ssh root@192.168.9.116 "docker exec lch_test bash -c 'cd /home/lch/work/torch_npu2 && bash ci/build.sh'"
+
+# Run tests
+ssh root@192.168.9.116 "docker exec lch_test bash -c 'cd /home/lch/work/torch_npu2 && pytest test_ops.py -v'"
+```
 
 ## Editing Guidelines
 

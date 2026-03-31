@@ -1,0 +1,4010 @@
+[
+  {
+    "issue_id": "28912",
+    "title": "[Feature]: DVM动态图无图融合性能增强：新增支持CV融合场景-mindspore-AtomGit | GitCode",
+    "issue_type": "需求",
+    "status": "DONE",
+    "labels": [
+      "test"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28407",
+    "title": "aicore_metrics supports memory_access parameters br_feature_tools to master-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28837",
+    "title": "[WIP][Task] 支持BytesIO类型载入checkpoint-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "TODO",
+    "labels": [
+      "test",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20732",
+    "title": "[Task] 给废弃接口添加提示-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "minddata"
+    ],
+    "related_prs": [
+      "90425",
+      "90425",
+      "5471",
+      "5471",
+      "5471",
+      "5471"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20920",
+    "title": "[Task]: dataset iterator outputs a string as a numpy-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "minddata",
+      "task"
+    ],
+    "related_prs": [
+      "89792",
+      "89792"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20870",
+    "title": "[Feature]: [OP Plugin] [OPS] [CPU] mint.add 算子适配-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20961",
+    "title": "[Feature]: 工具相关代码重构，解耦，独立so-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "profiler/dump-tools",
+      "feature"
+    ],
+    "related_prs": [
+      "91059",
+      "91059",
+      "91068",
+      "91068"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20722",
+    "title": "【Task】【Refactor】contiguous callback相关接口重构-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "non-compute-api"
+    ],
+    "related_prs": [
+      "90435",
+      "90435",
+      "90435",
+      "90435"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20883",
+    "title": "[Task]动态图删除废弃内部接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "89736",
+      "89736",
+      "89736",
+      "89736"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20716",
+    "title": "[RFC]: 【Feature】图模式下通过自定义算子回调Python -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "RFC"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20955",
+    "title": "[Feature]: 一些基础算子在昇腾平台的兼容性需改善-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20747",
+    "title": "[feature]: 动态图算子支持回调Python-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "feature"
+    ],
+    "related_prs": [
+      "90838",
+      "90838"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20904",
+    "title": "[task] max device memory大于卡上内存在特殊场景下不报错-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime"
+    ],
+    "related_prs": [
+      "89664",
+      "89664",
+      "89664",
+      "89664"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28827",
+    "title": "[Task]: cpu算子支持设置计算线程数op threads num-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "task"
+    ],
+    "related_prs": [
+      "91286",
+      "91286",
+      "107",
+      "107",
+      "91299",
+      "91299",
+      "107",
+      "107"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "21116",
+    "title": "[Feature]: Tensor.to接口功能扩展-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88934",
+      "88934",
+      "89136",
+      "89136",
+      "89675",
+      "89675"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28885",
+    "title": "[Feature]: 前端自定义infer-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "demo",
+      "compiler-frontend",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "21091",
+    "title": "[Feature]: MindSpore目录重构-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "TODO",
+    "labels": [
+      "pynative",
+      "runtime",
+      "compiler-backend"
+    ],
+    "related_prs": [
+      "91281",
+      "91281",
+      "91373",
+      "91373"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "1485",
+    "title": "[ST][MS][NET][qwen-14b/glm3-6b-32k][910B3 1p]batch推理失败:RuntimeError: Memory pool not enough, graph: kernel graph0, max static memory size: 61098426368, feature memory size: 1484794880,-mindspore-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "attr/function",
+      "device/ascend",
+      "kind/usability",
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28862",
+    "title": "[Feature]: 更新glog版本，从0.4.0升级到0.7.1-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [
+      "91578",
+      "91578",
+      "91582",
+      "91582",
+      "91582",
+      "91582"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21194",
+    "title": "Iteration one of the code br_feature_tools branch synchronizes the master branch-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "81309",
+      "81309"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20850",
+    "title": "[Feature]: [WIP] 提供原生并行动转静的基础框架能力-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend",
+      "feature"
+    ],
+    "related_prs": [
+      "90760",
+      "90760",
+      "88815",
+      "88815"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20743",
+    "title": "[Feature]: yaml流程算子scalar输入自动支持scalar tensor-mindspore-AtomGit | GitCode",
+    "issue_type": "需求",
+    "status": "CLOSED",
+    "labels": [
+      "ops",
+      "feature"
+    ],
+    "related_prs": [
+      "89799",
+      "89799",
+      "89799",
+      "89799"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20811",
+    "title": "【Task】增加PyNative CPP UT执行-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "89990",
+      "89990",
+      "89244",
+      "89244",
+      "90200",
+      "90200"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20712",
+    "title": "[Task]: numactl稳定H2D性能分析-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21003",
+    "title": "[Task]: 内存接口调用链路重构-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21052",
+    "title": "AtomGit | GitCode - 全球开发者的开源社区,开源代码托管平台}",
+    "issue_type": "",
+    "status": "",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "性能"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "21026",
+    "title": "[Feature]: jit支持开启compile cache-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "gitee",
+      "compiler-frontend",
+      "test",
+      "feature"
+    ],
+    "related_prs": [
+      "91216",
+      "91216"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "28857",
+    "title": "[Task]: op plugin支持compute-depend算子-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91493",
+      "91493",
+      "178",
+      "178",
+      "178",
+      "178",
+      "91598",
+      "91598",
+      "91598",
+      "91598"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20865",
+    "title": "[Feature]: 重计算功能增强-mindspore-AtomGit | GitCode",
+    "issue_type": "",
+    "status": "",
+    "labels": [
+      "pynative",
+      "feature"
+    ],
+    "related_prs": [
+      "89753",
+      "89753"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20737",
+    "title": "[Feature]: 并行动静统一新流程Dump适配-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "profiler/dump-tools",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20940",
+    "title": "[Feature]: 支持用户自定义数据增强hang时告警提示 -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "minddata"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20800",
+    "title": "[feature]: mindspore dlpack支持cpu tensor转换-mindspore-AtomGit | GitCode",
+    "issue_type": "需求",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "infer"
+    ],
+    "related_prs": [
+      "89998",
+      "89998",
+      "91027",
+      "91027",
+      "91204",
+      "91204"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20713",
+    "title": "[Feature]: 升级三方件openssl版本-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "feature"
+    ],
+    "related_prs": [
+      "90611",
+      "90611",
+      "90611",
+      "90611",
+      "90611",
+      "90611",
+      "90611",
+      "90611"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20810",
+    "title": "[Feature]: 蓝区门禁静态检查工具部署-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "mindspore-assistant",
+      "CICD"
+    ],
+    "related_prs": [
+      "90097",
+      "90097",
+      "90466",
+      "90466",
+      "90478",
+      "90478"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20727",
+    "title": "【Task】aclgraph新增校验-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend"
+    ],
+    "related_prs": [
+      "90460",
+      "90460",
+      "90469",
+      "90469"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20935",
+    "title": "[TASK]: 静态图测试用例梳理与迁移-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend"
+    ],
+    "related_prs": [
+      "91575",
+      "91575",
+      "91575",
+      "91575"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20875",
+    "title": "[Feature]: [OPS] nsa compress attention aclnn 算子适配-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "崩溃"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21113",
+    "title": "【Feature】Tensor支持CPU Storage-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88386",
+      "88386"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28783",
+    "title": "[Feature]: 单进程内支持多次通信初始化 -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21080",
+    "title": "[Feature]: graph/pynative模式判断去除-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [
+      "88876",
+      "88876"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21047",
+    "title": "[TASK]: tuple[int]/list[int]支持泛化概念的int类型（Generalized Int）-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20915",
+    "title": "[Feature]: ops.SparseCross接口下架-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [
+      "89590",
+      "89590"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20855",
+    "title": "[Feature]: 计算多流：静态图支持event做执行序控制-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20791",
+    "title": "[Feature]: Msrun提供给scheduler进程绑核的能力-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "cluster-manager",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20861",
+    "title": "[Feature]: 高可用支持亚健康热切换-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "test",
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [
+      "90958",
+      "90958",
+      "90909",
+      "90909"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20921",
+    "title": "[Task]: NSLB-DP特性适配hccl comm config中的hcclJobID和hcclWorldRankID -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "89571",
+      "89571"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20931",
+    "title": "[Feature]: 支持异构场景自动异常dump功能；-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "profiler/dump-tools",
+      "feature"
+    ],
+    "related_prs": [
+      "90606",
+      "90606",
+      "90710",
+      "90710"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20871",
+    "title": "[Feature]: [OP Plugin] [OPS] [CPU] mint.abs 算子适配-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20960",
+    "title": "[Task] 图算代码告警清理-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "89483",
+      "89483"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20820",
+    "title": "【Feature】：generator在pynative下不调用算子，改为直调c++实现-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "gitee",
+      "ops",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20814",
+    "title": "【task】删除ms extention无用代码-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "89974",
+      "89974"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21748",
+    "title": "Fix bug CANN package does not support aclprofGetSupportedFeatures method-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "83021",
+      "83021"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28877",
+    "title": "[Feature]: 新增FusedAdamW 优化器-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "test",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28903",
+    "title": "[Feature]: 重计算接口功能增强-mindspore-AtomGit | GitCode",
+    "issue_type": "Documentation",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "21090",
+    "title": "[Feature]: dry run支持纯CPU环境-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88755",
+      "88755"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21078",
+    "title": "[Feature]: Runtime切换CPU执行模式-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "87809",
+      "87809"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28858",
+    "title": "[Feature]: msrun支持'--bind numa'绑定内存-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "cluster-manager",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28918",
+    "title": "[Task] dvm使用方式从git lfs切换成submodule-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28848",
+    "title": "【Task】aclgraph相关日志信息清理-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "91386",
+      "91386"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20759",
+    "title": "[Task]: op plugin流程支持非连续tensor-mindspore-AtomGit | GitCode",
+    "issue_type": "",
+    "status": "",
+    "labels": [
+      "ops",
+      "task"
+    ],
+    "related_prs": [
+      "90299",
+      "90299",
+      "90312",
+      "90312",
+      "60",
+      "60",
+      "91222",
+      "91222",
+      "91260",
+      "91260"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28829",
+    "title": "[Feature]: CPU后端 op plugin算子接入-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "ops",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20709",
+    "title": "【Task】校验新增拦截字段-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend"
+    ],
+    "related_prs": [
+      "90615",
+      "90615",
+      "90637",
+      "90637"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21018",
+    "title": "[Feature]: 动态图反向单算子expander直调性能优化-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "RFC"
+    ],
+    "related_prs": [
+      "90127",
+      "90127"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21059",
+    "title": "[Task]: 虚拟内存调用ACL HBM MEM HUGE1G参数申请1G内存-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "task"
+    ],
+    "related_prs": [
+      "89114",
+      "89114",
+      "89377",
+      "89377"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20748",
+    "title": "【Task】python侧api当前用model的phase是否包含prefiill, increment判断走推理流程，需要优化成使用jit config的infer boost配置判断-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "infer"
+    ],
+    "related_prs": [
+      "90330",
+      "90330"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "1075",
+    "title": "[MT][910B][8p]bert large boost 训练时算子报错(AllReduce-op397(HcomAllReduce) load task fail)-mindspore-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "attr/function",
+      "device/ascend",
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20768",
+    "title": "[Task] Add testcases for dataset vision-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "minddata",
+      "task"
+    ],
+    "related_prs": [
+      "90191",
+      "90191",
+      "90249",
+      "90249"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20989",
+    "title": "[Task] 图算ST/UT用例补充-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "89453",
+      "89453",
+      "89940",
+      "89940",
+      "90182",
+      "90182",
+      "90416",
+      "90416",
+      "90560",
+      "90560"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20999",
+    "title": "[Feature]: [OPS]新增Tensor.view(dtype)接口，实现Tensor.view的重载-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "RFC"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "880",
+    "title": "2.5版本Task代码合入-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20778",
+    "title": "[Task]: 实现Tensor.set 接口的功能-mindspore-AtomGit | GitCode",
+    "issue_type": "",
+    "status": "",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20809",
+    "title": "[Task] add testcases for dataset text transform-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "minddata"
+    ],
+    "related_prs": [
+      "90110",
+      "90110",
+      "90110",
+      "90110",
+      "90217",
+      "90217"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28899",
+    "title": "[Feature]: 静态图支持配置Cell输出做重计算-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "TODO",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [
+      "91585",
+      "91585"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "78",
+    "title": "Adapter aclprofGetSupportedFeaturesV2_ interface compatibility testing module-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "CLOSED",
+    "labels": [],
+    "related_prs": [
+      "84020",
+      "84020"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20959",
+    "title": "[Feature]: 静态图DataDump功能支持非连续算子-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "profiler/dump-tools",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20848",
+    "title": "[Feature]: 精度spike支持step级恢复-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21932",
+    "title": "进行训练测试时出现：RuntimeError: The pointer[old device address] is null.项目位置是：mindscience-master/MindElec/examples/hybrid driven/feature based MT inversion/train.py-mindspore-AtomGit | GitCode",
+    "issue_type": "Bug",
+    "status": "CLOSED",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21771",
+    "title": "Synchronize the content of the master branch to the br_feature_tools branch-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "82300",
+      "82300"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20798",
+    "title": "[Feature] Computation and Communication Concurrent Execution Order Optimizer-mindspore-AtomGit | GitCode",
+    "issue_type": "需求",
+    "status": "DONE",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20839",
+    "title": "[Feature]: Dataset support communication through the send/receive interface-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "minddata"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20829",
+    "title": "[Feature]: profile 支持首轮拉起时长统计及慢节点分析-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "profiler/dump-tools",
+      "test",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20938",
+    "title": "[Feature]: MindSpore Lite Ascend离线模型推理支持TimeOut限制-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [
+      "89514",
+      "89514"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20878",
+    "title": "[Feature]: storage支持进程间内存共享-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "feature"
+    ],
+    "related_prs": [
+      "91069",
+      "91069"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20788",
+    "title": "[Task]: VIEW算子后端KernelMod不区分硬件-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "task"
+    ],
+    "related_prs": [
+      "91329",
+      "91329"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21764",
+    "title": "fix mstx err when push task in self queue-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "82524",
+      "82524",
+      "82566",
+      "82566"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20799",
+    "title": "[Feature]: [OPS]mint.nn.functional.adaptive max pool2d 反向适配aclnn算子-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "foruda",
+      "ops",
+      "test",
+      "feature"
+    ],
+    "related_prs": [
+      "90956",
+      "90956"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20869",
+    "title": "[Feature]: 支持分核控制接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20698",
+    "title": "[Feature]: Support registering forward hooks on Parameter objects of a net-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20808",
+    "title": "[Task] add testcases for dataset audio transform-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "minddata"
+    ],
+    "related_prs": [
+      "90136",
+      "90136"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28888",
+    "title": "[Feature]: hyper offload自动调优微调接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20849",
+    "title": "[Task] 删除dataset中的py transforms和c tranforms模块-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "minddata",
+      "task"
+    ],
+    "related_prs": [
+      "89534",
+      "89534",
+      "89534",
+      "89534",
+      "5471",
+      "5471",
+      "18115",
+      "18115",
+      "18117",
+      "18117"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21100",
+    "title": "【Feature】自定义算子CustomOpBuilder支持静态图-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88727",
+      "88727"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28790",
+    "title": "[Task]: deterministic新增用例-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "91114",
+      "91114"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21074",
+    "title": "[Feature]: MindSpore图模式增强赋值语句Inplace能力重构-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend",
+      "test",
+      "feature"
+    ],
+    "related_prs": [
+      "91033",
+      "91033"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20734",
+    "title": "[Task]: 增加worker进程与scheduler进程断链后重试次数-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "91408",
+      "91408",
+      "91434",
+      "91434"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20765",
+    "title": "[Feature]: Remove silent check v2/v3 feature-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "high-available",
+      "task"
+    ],
+    "related_prs": [
+      "90235",
+      "90235",
+      "17828",
+      "17828"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20866",
+    "title": "[Task]: 优化细粒度绑核以及组网心跳的日志-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "89785",
+      "89785",
+      "90933",
+      "90933",
+      "91101",
+      "91101"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20700",
+    "title": "[Task][Refactor] 重构Pybind模块-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "90742",
+      "90742",
+      "91285",
+      "91285"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20741",
+    "title": "[Task]: yaml流程算子scalar输入自动支持scalar tensor-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "task"
+    ],
+    "related_prs": [
+      "89799",
+      "89799"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20885",
+    "title": "[Task]动态图补充ut/st用例-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "89696",
+      "89696",
+      "89696",
+      "89696"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20786",
+    "title": "[Feature]: MindSpore支持Python3.12-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "CICD",
+      "feature"
+    ],
+    "related_prs": [
+      "89743",
+      "89743",
+      "90103",
+      "90103",
+      "90103",
+      "90103",
+      "89743",
+      "89743",
+      "90424",
+      "90424"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20936",
+    "title": "[TASK]: 优化同步执行日志提示-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "intern-task-rewiew",
+      "runtime"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21097",
+    "title": "【Feature】自定义算子支持TensorAccessor-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [
+      "feature"
+    ],
+    "related_prs": [
+      "88727",
+      "88727",
+      "88840",
+      "88840",
+      "88727",
+      "88727"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "1887",
+    "title": "[CT][MS]跟踪HcclTaskInfo::count修改类型为int64，支持4GB以上通信. 合入r2.3-mindspore-AtomGit | GitCode",
+    "issue_type": "Bug-Report",
+    "status": "DONE",
+    "labels": [
+      "device/ascend",
+      "parallel",
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28821",
+    "title": "[Task]: collective manager删除reinit -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "91279",
+      "91279"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21110",
+    "title": "【Feature】empty/empty like接口支持pin memory-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88440",
+      "88440"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28801",
+    "title": "[Task]用例执行耗时优化，灵活调度小用例到单卡并发执行-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "task"
+    ],
+    "related_prs": [
+      "91325",
+      "91325"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21083",
+    "title": "[Feature]: MemStat内存统计方式重构-mindspore-AtomGit | GitCode",
+    "issue_type": "Requirement",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20862",
+    "title": "[Feature]: 后端pass支持多核多流-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20792",
+    "title": "[Task]: 删除aclrtCreateEvent接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "device/ascend",
+      "runtime",
+      "task"
+    ],
+    "related_prs": [
+      "89810",
+      "89810"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20891",
+    "title": "[Feature]: [OPS] ops.tensor scatter add aclnn算子适配-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "test",
+      "feature"
+    ],
+    "related_prs": [
+      "343",
+      "343"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype",
+      "性能",
+      "崩溃"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20872",
+    "title": "[Feature]: 支持计算流多流-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20771",
+    "title": "[task] add level0 test cases for dataset-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "minddata",
+      "task"
+    ],
+    "related_prs": [
+      "90174",
+      "90174",
+      "90174",
+      "90174"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20817",
+    "title": "【Task】context中MS CTX ENABLE MINDRT已经被废弃，相关代码梳理删除-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20957",
+    "title": "[Feature]: 支持gradjit正确设置jit config-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "gitee",
+      "compiler-frontend",
+      "feature"
+    ],
+    "related_prs": [
+      "89519",
+      "89519"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21093",
+    "title": "【Feature】自定义算子支持AclnnOpRunner-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "88727",
+      "88727",
+      "88841",
+      "88841",
+      "88727",
+      "88727",
+      "17505",
+      "17505"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28840",
+    "title": "[Task]: 通信算子支持bool类型-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "compiler-backend",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21031",
+    "title": "[Task]: MindSpore图编译目录重构-mindspore-AtomGit | GitCode",
+    "issue_type": "需求",
+    "status": "CLOSED",
+    "labels": [
+      "compiler-frontend"
+    ],
+    "related_prs": [
+      "91110",
+      "91110",
+      "91253",
+      "91253"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "28795",
+    "title": "[TASK]: py method接口支持op plugin算子调用-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "ops",
+      "task"
+    ],
+    "related_prs": [
+      "91090",
+      "91090"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20917",
+    "title": "[TASK] aclgraph新增环境变量控制捕获shape最大数量限制-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "task"
+    ],
+    "related_prs": [
+      "89430",
+      "89430"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20760",
+    "title": "[Task] 新增算子类型 PrimType Inner ThirdPartyModel-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "90093",
+      "90093"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20731",
+    "title": "[Feature]: 动静统一断点续训-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [
+      "90586",
+      "90586"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20783",
+    "title": "[Feature]: MindSpore适配高版本操作系统-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "CICD",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20933",
+    "title": "[Feature]: 支持同步场景TensorDump功能-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "profiler/dump-tools",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20770",
+    "title": "[Feature]:【版本兼容性】MindSpore框架保持对MindX前向兼容4个版本-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "test",
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20847",
+    "title": "[Task]: 修改mindspore.runtime.set cpu affinity给热点模块runtime actor线程绑核生效step数-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "task"
+    ],
+    "related_prs": [
+      "89763",
+      "89763",
+      "89870",
+      "89870"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20956",
+    "title": "[TASK]: 放开后端在推理场景进行输入拷贝的时候，对于异构拷贝的限制-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "RFC"
+    ],
+    "related_prs": [
+      "89492",
+      "89492"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28997",
+    "title": "[Task]: Tensor 索引重构，使能三级流水-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "282",
+    "title": "feature aicore_metrics supports memory_access parameters-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "81538",
+      "81538",
+      "81631",
+      "81631",
+      "81652",
+      "81652"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "内存",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28964",
+    "title": "[Feature]: 添加自定义算子仓的看护用例-mindspore-AtomGit | GitCode",
+    "issue_type": "Documentation",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "21092",
+    "title": "[Feature]: 通信算子功能归一-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "RFC",
+      "cluster-manager"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "梯度",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28713",
+    "title": "[Task]: 优化通信库析构 -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "91049",
+      "91049"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21061",
+    "title": "[Task]: 优化虚拟内存的搜索逻辑-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28921",
+    "title": "[Feature]: Cell前向hook增加prepend功能-mindspore-AtomGit | GitCode",
+    "issue_type": "Documentation",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "28673",
+    "title": "[Task] 后端clean code-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend"
+    ],
+    "related_prs": [
+      "90930",
+      "90930"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28791",
+    "title": "[Task]: Cluster适配CANN 8.5.0-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "task"
+    ],
+    "related_prs": [
+      "91101",
+      "91101",
+      "91103",
+      "91103"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21086",
+    "title": "[Feature]: mint.distribute.init process group支持init method和store初始化-mindspore-AtomGit | GitCode",
+    "issue_type": "Requirement",
+    "status": "DONE",
+    "labels": [
+      "cluster-manager",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "算子",
+      "编译",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20836",
+    "title": "[Task]：删除HcomExec前缀接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "task"
+    ],
+    "related_prs": [
+      "89748",
+      "89748",
+      "90069",
+      "90069"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "29107",
+    "title": "[Task]: mp相关用例在910A机器跑不起来-mindspore-AtomGit | GitCode",
+    "issue_type": "Bug",
+    "status": "DONE",
+    "labels": [
+      "bug"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21688",
+    "title": "[Task]: MindSpore Lite mindir推理权重分离下支持buffer加载模式-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "mindspore-lite"
+    ],
+    "related_prs": [
+      "90472",
+      "90472",
+      "90484",
+      "90484",
+      "90484",
+      "90484"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20867",
+    "title": "[Feature]: 高可用支持hccl故障的step级快恢-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "high-available"
+    ],
+    "related_prs": [
+      "89988",
+      "89988",
+      "90457",
+      "90457"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "算子",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20913",
+    "title": "【TASK】2.7.1版本后端运行时clean code-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "compiler-backend"
+    ],
+    "related_prs": [
+      "89673",
+      "89673"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20750",
+    "title": "[task] mac compile error-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [
+      "90341",
+      "90341",
+      "90341",
+      "90341"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20802",
+    "title": "[Task]: 实现mindspore.frombuffer接口-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "feature",
+      "task"
+    ],
+    "related_prs": [
+      "90210",
+      "90210",
+      "90379",
+      "90379"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "内存",
+      "梯度",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20812",
+    "title": "【Task】aclgraph回放阶段性能重构优化-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "CLOSED",
+    "labels": [
+      "compiler-backend",
+      "task"
+    ],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20711",
+    "title": "[Feature][CAAI]: Distributed dataloader 原型打通 -mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "feature",
+      "minddata"
+    ],
+    "related_prs": [
+      "90787",
+      "90787"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20952",
+    "title": "[Task]: Transpose优化转Reshape Pass开发-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-backend",
+      "feature"
+    ],
+    "related_prs": [],
+    "has_root_cause": false,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype",
+      "性能"
+    ],
+    "backend_type": [
+      "Ascend"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20696",
+    "title": "[Task]: 归拢所有高可用特性看护用例-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "high-available",
+      "task"
+    ],
+    "related_prs": [
+      "90781",
+      "90781"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "20787",
+    "title": "[Feature]: mindspore 添加对 python3.12 的支持-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "compiler-frontend",
+      "task"
+    ],
+    "related_prs": [
+      "72999",
+      "73427",
+      "73472",
+      "73538",
+      "89743",
+      "89743",
+      "1220",
+      "1220"
+    ],
+    "has_root_cause": false,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "编译",
+      "梯度",
+      "dtype",
+      "死锁"
+    ],
+    "backend_type": [],
+    "component": ""
+  },
+  {
+    "issue_id": "20877",
+    "title": "【TASK】PyNative测试用例增强-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "pynative",
+      "task"
+    ],
+    "related_prs": [
+      "89821",
+      "89821",
+      "90890",
+      "90890",
+      "91002",
+      "91002"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "精度",
+      "shape",
+      "算子",
+      "编译",
+      "梯度",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21096",
+    "title": "【Feature】支持AlltoAllVC算子-mindspore-AtomGit | GitCode",
+    "issue_type": "RFC",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "RFC",
+      "cluster-manager"
+    ],
+    "related_prs": [
+      "88520",
+      "88520",
+      "88581",
+      "88581",
+      "88882",
+      "88882"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": true,
+    "error_keywords": [
+      "shape",
+      "内存",
+      "算子",
+      "编译",
+      "dtype",
+      "性能",
+      "死锁"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21125",
+    "title": "CANN包权限检测br feature tools分支同步到master分支-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "CLOSED",
+    "labels": [],
+    "related_prs": [
+      "88292",
+      "88292"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "28871",
+    "title": "[Task]: 图算使用的第三方开源软件版本升级-mindspore-AtomGit | GitCode",
+    "issue_type": "Task-Tracking",
+    "status": "DONE",
+    "labels": [],
+    "related_prs": [],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  },
+  {
+    "issue_id": "21000",
+    "title": "[Task]: 后端运行时DT测试用例整改【WIP】-mindspore-AtomGit | GitCode",
+    "issue_type": "任务",
+    "status": "DONE",
+    "labels": [
+      "runtime",
+      "compiler-backend",
+      "task"
+    ],
+    "related_prs": [
+      "90408",
+      "90408",
+      "90736",
+      "90736"
+    ],
+    "has_root_cause": true,
+    "has_stack_trace": false,
+    "error_keywords": [
+      "shape",
+      "算子",
+      "编译",
+      "dtype"
+    ],
+    "backend_type": [
+      "Ascend",
+      "GPU",
+      "CPU"
+    ],
+    "component": ""
+  }
+]

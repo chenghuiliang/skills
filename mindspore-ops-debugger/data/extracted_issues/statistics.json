@@ -1,0 +1,46 @@
+{
+  "total_files": 100,
+  "parsed_issues": 100,
+  "with_root_cause": 67,
+  "with_stack_trace": 49,
+  "top_labels": {
+    "bug": 10,
+    "kind/cann": 4,
+    "compiler-frontend": 2,
+    "runtime": 1,
+    "attr/function": 1,
+    "infer": 1,
+    "kind/occasionally": 1,
+    "sig/llm-inference": 1,
+    "test/smoke": 1,
+    "mindir": 1,
+    "kind/developertest": 1,
+    "log/lose": 1,
+    "ci-pipeline-passed": 1,
+    "mindspore-cla/yes": 1,
+    "sig/ms-lite": 1
+  },
+  "issue_types": {
+    "": 2,
+    "Bug-Report": 54,
+    "Bug-Template": 43,
+    "Task-Tracking": 1
+  },
+  "error_keywords": {
+    "精度": 44,
+    "shape": 46,
+    "内存": 20,
+    "编译": 66,
+    "梯度": 36,
+    "dtype": 99,
+    "性能": 49,
+    "死锁": 28,
+    "算子": 48,
+    "崩溃": 2
+  },
+  "backend_distribution": {
+    "Ascend": 94,
+    "GPU": 9,
+    "CPU": 20
+  }
+}
