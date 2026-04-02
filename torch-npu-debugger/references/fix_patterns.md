@@ -14,6 +14,9 @@
 10. [ACL API 边界保护](#10-acl-api-边界保护)
 11. [Optimizer 测试兼容性修复](#11-optimizer-测试兼容性修复)
 12. [ONNX 测试兼容性修复](#12-onnx-测试兼容性修复)
+13. [上游 Bug 修复模式（Python 层补丁）](#13-上游-bug-修复模式python-层补丁)
+14. [测试辅助文件缺失修复](#14-测试辅助文件缺失修复)
+15. [框架层语义修复](#15-框架层语义修复)
 
 ---
 
@@ -849,7 +852,179 @@ print("strip_doc_string: OK")
 
 ---
 
-## 13. 测试辅助文件缺失修复
+## 13. 上游 Bug 修复模式（Python 层补丁）
+
+### 13.1 `__call__` 补丁修复 Eager 模式
+
+**问题**: PyTorch/oneDNN 上游在特定平台（如 aarch64）的算子实现有数值精度 bug，导致 ONNX 导出验证失败。
+
+**典型场景**: oneDNN quantized conv3d 在 aarch64 上 u8s8 reorder 行为不一致。
+
+**修复**: 通过 `__call__` 补丁使用 float 参考实现替代有 bug 的算子。
+
+**文件位置**: `torch_npu/utils/_module.py`
+
+```python
+# torch_npu/utils/_module.py
+
+import torch
+import torch.nn.functional as F
+
+# Save original __call__ methods
+_orig_quantized_conv3d_call = torch.ao.nn.quantized.Conv3d.__call__
+_orig.quantized_conv_relu3d_call = torch.ao.nn.intrinsic.quantized.ConvReLU3d.__call__
+
+def _quantized_conv3d_call(self, input):
+    """
+    Override __call__ to use float reference implementation on CPU.
+    This works around oneDNN quantized conv3d numerical bug on aarch64.
+
+    Limitations:
+    - Only works in eager mode (torch.jit.script bypasses __call__)
+    - Scripted mode cannot be fixed at Python layer due to prim::TupleUnpack
+    """
+    if input.device.type == 'cpu' and not torch.jit.is_tracing() and not torch.jit.is_scripting():
+        # Use float reference implementation
+        weight, bias = self._weight_bias()
+        input_f = input.dequantize()
+        weight_f = weight.dequantize()
+        output = F.conv3d(input_f, weight_f, bias, self.stride, self.padding, self.dilation, self.groups)
+        return torch.quantize_per_tensor(output, self.scale, self.zero_point, input.dtype)
+    return _orig_quantized_conv3d_call(self, input)
+
+# Apply patches
+torch.ao.nn.quantized.Conv3d.__call__ = _quantized_conv3d_call
+torch.ao.nn.intrinsic.quantized.ConvReLU3d.__call__ = _quantized_conv3d_call  # ConvReLU3d uses same logic
+```
+
+**关键点**:
+1. 只在 CPU 设备上使用 float 参考
+2. 检查 `torch.jit.is_tracing()` 和 `torch.jit.is_scripting()` 避免 JIT 编译时执行
+3. 保存原始方法以便回退
+
+### 13.2 Scripted 模式无法修复的判定
+
+**问题**: `torch.jit.script` 编译 `forward` 方法，绕过 `__call__` 补丁。
+
+**技术原因**:
+1. TorchScript 直接编译 `forward` 方法，不经过 `__call__`
+2. 尝试修补 `forward` 方法时，调用 `_weight_bias()` 会产生 `prim::TupleUnpack` 操作
+3. ONNX 导出器不支持 `prim::TupleUnpack` 从 `prim::CallMethod` 返回的 tuple
+
+**错误链**:
+```
+_packed_params.unpack()  (C++ 绑定方法)
+         ↓
+prim::CallMethod[name="unpack"]  (TorchScript IR)
+         ↓
+返回 tuple (weight, bias)
+         ↓
+weight, bias = ...  (Python unpacking)
+         ↓
+prim::TupleUnpack  (TorchScript IR)
+         ↓
+lower_tuples.cpp 无法处理
+         ↓
+RuntimeError: prim::TupleUnpack not matched to tuple construct
+```
+
+**修复策略**:
+
+| 场景 | 可行性 | 说明 |
+|------|--------|------|
+| Eager 模式 | ✅ 可修复 | `__call__` 补丁 |
+| Scripted 模式 | ❌ 无法修复 | 需要 PyTorch 上游修复 `lower_tuples.cpp` |
+| Traced 模式 | ⚠️ 部分可行 | 取决于模型结构 |
+
+**测试跳过方式**:
+
+```python
+# test/onnx/test_pytorch_onnx_onnxruntime_npu.py
+
+from pytorch_test_common import skipScriptTest
+
+@skipScriptTest(
+    reason="oneDNN quantized conv3d has numerical bug on aarch64. "
+    "The __call__ patch fixes eager mode, but scripted mode cannot be "
+    "fixed because patching forward breaks ONNX export (prim::TupleUnpack). "
+    "See: https://github.com/pytorch/pytorch/issues/58657"
+)
+def test_quantized_conv3d_relu_cpu(self):
+    """Regression test for oneDNN quantized conv3d CPU numerical bug."""
+    model = torch.ao.nn.intrinsic.quantized.ConvReLU3d(16, 33, [2, 3, 4])
+    # ... test code
+```
+
+### 13.3 上游 Issue 搜索策略
+
+当遇到疑似上游 bug 时：
+
+1. **搜索 PyTorch Issues**:
+   - 关键词：算子名 + 平台（aarch64/ARM）+ 错误类型（numerical/precision）
+   - 示例：`quantized conv aarch64 numerical`
+
+2. **搜索 oneDNN Issues**:
+   - 关键词：算子名 + 平台 + 错误类型
+   - 示例：`u8s8 reorder aarch64`
+
+3. **搜索相关 PR**:
+   - 检查是否有修复 PR 但未合并
+   - 检查修复 PR 的评论了解限制
+
+4. **记录关联**:
+   - 在测试代码注释中引用相关 issue
+   - 在分析报告中记录 issue 链接
+
+### 13.4 归档交付件
+
+每次定位完成后，归档以下内容：
+
+```
+<debug_dir>/<test_name>/
+├── issue.txt                    # 原始错误日志
+├── analysis_report.md           # 完整分析报告
+├── changes.diff                 # 代码变更 diff
+├── <file>.patched               # 修补后的文件
+└── <test_file>.patched          # 修补后的测试文件
+```
+
+**分析报告模板**:
+
+```markdown
+# 问题分析报告
+
+## 问题概述
+- 测试用例：
+- 错误信息：
+
+## 根本原因
+（根因描述）
+
+## 相关上游 Issues
+| Issue | 状态 | 说明 |
+|-------|------|------|
+| ... | ... | ... |
+
+## 修复方案
+| 模式 | 状态 | 说明 |
+|------|------|------|
+| Eager 模式 | ✅/❌ | ... |
+| Scripted 模式 | ✅/❌ | ... |
+
+## 代码变更
+- 文件1：...
+- 文件2：...
+
+## 结论
+（问题链总结）
+
+## 日期
+YYYY-MM-DD
+```
+
+---
+
+## 14. 测试辅助文件缺失修复
 
 ### 13.1 测试文件同步时缺失辅助模块
 

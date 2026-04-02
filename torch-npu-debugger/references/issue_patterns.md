@@ -14,6 +14,8 @@
 10. [环境兼容性问题](#10-环境兼容性问题)
 11. [自定义算子与 ATB 问题](#11-自定义算子与-atb-问题)
 12. [快速定界决策树](#12-快速定界决策树)
+13. [ONNX 导出与数值精度问题](#13-onnx-导出与数值精度问题)
+14. [测试用例与门禁执行问题](#14-测试用例与门禁执行问题)
 
 ---
 
@@ -32,6 +34,7 @@
 | 环境兼容性 | ~7% | GCC ABI, SoC 版本, triton 冲突 |
 | 性能 | ~5% | Format 转换, task queue, MLIR fallback |
 | 自定义算子/ATB | ~5% | gen_opapi, ATB 算子, 结构化适配 |
+| **ONNX 导出/上游 bug** | **~3%** | **oneDNN, TorchScript, prim::TupleUnpack** |
 
 ---
 
@@ -588,6 +591,21 @@ torch_npu 报错
 │     │  └─ 添加 skipIfONNXRuntimeNoBFloat16 装饰器跳过测试
 │     ├─ "AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'" → ONNX 1.17.0 与 protobuf 5.x+ 不兼容
 │     │  └─ 降级 protobuf: `pip install protobuf==4.25.3` 或升级 onnx >= 1.18.0
+│     ├─ "prim::TupleUnpack not matched to tuple construct" → PyTorch JIT lower_tuples.cpp 限制
+│     │  ├─ 检查是否涉及 C++ 绑定方法返回 tuple（如 _packed_params.unpack()）
+│     │  ├─ 搜索 PyTorch issue: https://github.com/pytorch/pytorch/issues/58657
+│     │  └─ 无法在 Python 层修复，需跳过 scripted 模式测试
+│     ├─ ONNX 导出验证数值精度失败（Tensor-likes are not close）
+│     │  ├─ 仅特定平台失败 → 搜索 PyTorch/oneDNN GitHub issues
+│     │  │  ├─ aarch64 + quantized conv → oneDNN u8s8 reorder bug (issue #2412)
+│     │  │  └─ 其他平台特定问题 → 查找相关上游 issue
+│     │  ├─ Eager 正常，Scripted 失败 → TorchScript 绕过 __call__ 补丁
+│     │  │  ├─ 检查是否使用 torch.jit.script
+│     │  │  └─ 添加 skipScriptTest 装饰器跳过
+│     │  ├─ quantized 算子 + CPU 执行 → oneDNN 可能有问题
+│     │  │  ├─ 搜索 PyTorch issue: https://github.com/pytorch/pytorch/issues?q=quantized+ARM
+│     │  │  └─ 尝试 __call__ 补丁使用 float 参考
+│     │  └─ warning 提示 CPU 执行但结果错 → CPU fallback 路径本身有 bug
 │     └─ 其他 ONNX Runtime 错误 → 检查 providers 列表，确认无 NPUExecutionProvider
 │
 │  └─ 测试文件缺失辅助模块
@@ -607,7 +625,75 @@ torch_npu 报错
    ├─ set_device() 后精度降低 → GE 初始化顺序，plog 搜 PrecisionMode
    └─ warning 提示 CPU 执行但结果仍错 → CPU fallback 路径本身有 bug
 
-## 13. 测试用例与门禁执行问题
+## 13. ONNX 导出与数值精度问题
+
+### 诊断特征
+
+**典型错误信息**:
+- ONNX 导出验证时 `AssertionError: Tensor-likes are not close!`
+- `Mismatched elements: XXX / YYY (ZZ%)` 但仅在特定平台（如 aarch64）出现
+- Eager 模式正常，Scripted 模式失败
+- `prim::TupleUnpack not matched to tuple construct`
+
+### 常见根因
+
+| 根因 | 说明 | 定位方向 |
+|------|------|---------|
+| **oneDNN 上游 bug** | oneDNN 在特定平台（aarch64）的量化卷积实现有数值精度问题 | 搜索 PyTorch/oneDNN GitHub issues |
+| **CPU fallback 路径 bug** | 算子回退到 CPU 执行，但 CPU 实现本身有 bug | 区分"NPU 未实现"和"CPU 本身有 bug" |
+| **TorchScript 绕过补丁** | `torch.jit.script` 编译 `forward` 方法，绕过 `__call__` 补丁 | 检查是否使用了 `torch.jit.script` |
+| **prim::TupleUnpack 限制** | PyTorch JIT `lower_tuples.cpp` 不支持 `prim::CallMethod` 返回 tuple | 检查是否涉及 C++ 绑定方法返回 tuple |
+
+### 典型案例：oneDNN quantized conv3d aarch64 bug
+
+**问题表现**:
+```
+AssertionError: Tensor-likes are not close!
+Mismatched elements: 3463 / 5346 (64.8%)
+Greatest absolute difference: 65 at index (2, 25, 1, 4, 1)
+```
+
+**根因链**:
+```
+oneDNN aarch64 quantized conv bug (u8s8 reorder 行为不一致)
+         ↓
+PyTorch quantized conv3d 数值错误
+         ↓
+torch_npu 通过 __call__ 补丁修复 eager 模式
+         ↓
+Scripted 模式因 lower_tuples.cpp 限制无法修复
+```
+
+**相关上游 Issues**:
+
+| Issue | 状态 | 说明 |
+|-------|------|------|
+| PyTorch [#144770](https://github.com/pytorch/pytorch/issues/144770) | Open | [ARM] TestQuantizedConv 失败，追踪到 ideep/oneDNN |
+| PyTorch [#58657](https://github.com/pytorch/pytorch/issues/58657) | Open | prim::TupleUnpack not matched to tuple construct |
+| oneDNN [#2412](https://github.com/uxlfoundation/oneDNN/issues/2412) | Closed | Aarch64 和 X64 在 u8s8 reorder 行为不一致 |
+
+### 诊断步骤
+
+1. **确认平台**: 检查是否在特定平台（aarch64）上失败
+2. **隔离模式**: 区分 eager 模式 vs scripted 模式
+3. **搜索上游**: 在 PyTorch/oneDNN GitHub 搜索相关 issues
+4. **验证 CPU bug**: 如果 warning 提示 CPU 执行，确认是否 CPU 本身有 bug
+5. **检查补丁可行性**: 评估能否通过 `__call__` 补丁修复
+
+### 二级定界决策
+
+```
+ONNX 导出验证失败
+├─ 仅特定平台失败 → 搜索上游平台相关 issues
+├─ Eager 正常，Scripted 失败 → TorchScript 绕过 __call__ 补丁
+├─ prim::TupleUnpack 错误 → PyTorch JIT lower_tuples.cpp 限制
+├─ quantized 算子数值错误 → 检查 oneDNN 实现是否有 bug
+└─ warning 提示 CPU 执行 → CPU fallback 路径本身有 bug
+```
+
+---
+
+## 14. 测试用例与门禁执行问题
 
 ### 13.1 测试用例在门禁上未执行
 
