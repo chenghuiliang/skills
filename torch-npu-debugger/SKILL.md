@@ -156,19 +156,47 @@ python scripts/workflow_guard.py mark fix_applied '{"files": ["third_party/op-pl
 
 **目标**: 在 Ascend 服务器上编译测试
 
-**操作**:
-```bash
-# 1. 同步代码到远程服务器
-./scripts/sync-to-server.sh
+**重要**: 使用 Agent 工具（subAgent）执行远程编译，避免大量日志输出污染主上下文。
 
-# 2. SSH 到服务器并在 Docker 容器中编译
-ssh root@192.168.9.116 "docker exec lch_test bash -c 'cd /home/lch/work/torch_npu2 && bash ci/build.sh'"
+**方式 A: 使用 subAgent（推荐）**
 
-# 3. 运行测试
-ssh root@192.168.9.116 "docker exec lch_test bash -c 'cd /home/lch/work/torch_npu2 && pytest test_ops.py::test_cdist -v'"
+subAgent 隔离远程命令输出，只返回简洁摘要：
+
+```
+使用 Agent 工具（subagent_type: general-purpose）执行以下任务：
+
+描述: 远程编译 torch_npu
+提示词: |
+  你是一个远程构建代理。执行以下任务并只返回简洁的 JSON 结果：
+
+  1. 运行同步脚本: ./scripts/sync-to-server.sh
+  2. 执行远程编译: python scripts/remote_build_agent.py build
+  3. 如果编译成功，运行测试: python scripts/remote_build_agent.py test test/test_ops.py::test_cdist
+
+  只返回以下信息，不要输出完整日志：
+  - {"success": true/false, "build_status": "...", "test_status": "...", "key_errors": [...]}
 ```
 
-**输出**: 编译成功、测试通过
+**方式 B: 直接使用辅助脚本**
+
+如果辅助脚本可用，直接调用会返回简洁 JSON：
+
+```bash
+# 同步 + 编译（返回 JSON 摘要）
+python scripts/remote_build_agent.py build
+
+# 运行测试（返回 JSON 摘要）
+python scripts/remote_build_agent.py test test/test_ops.py::test_cdist
+```
+
+**方式 C: 直接 SSH（不推荐，日志量大）**
+
+```bash
+# 仅在必要时使用，日志量大会污染上下文
+ssh root@192.168.9.116 "docker exec lch_test bash -c 'cd /home/lch/work/torch_npu2 && bash ci/build.sh'"
+```
+
+**输出**: 编译成功、测试通过（简洁摘要）
 
 **检查点** (强制):
 ```bash
@@ -221,13 +249,45 @@ python scripts/workflow_guard.py require
 
 本 skill 充分利用 Claude Code 的原生能力：
 
-- **Agent 工具**: 使用 Explore subagent 进行深度代码探索
-- **Bash 工具**: 执行远程命令（ssh）和本地脚本
+- **Agent 工具**: 使用 subAgent 隔离大量输出的远程操作，避免上下文爆炸
+- **Bash 工具**: 执行本地脚本和简洁命令
 - **Read/Edit 工具**: 读取和修改源码文件
 - **Grep 工具**: 搜索代码模式
 - **TaskCreate/TaskUpdate**: 跟踪工作进度
 
 无需启动额外的后台进程或 Agent 系统。
+
+### 使用 SubAgent 避免上下文爆炸
+
+远程编译和测试会产生大量日志输出（5000-20000 行），直接执行会填满主 Agent 上下文。
+
+**解决方案**: 使用 Agent 工具创建 subAgent 来隔离这些操作。
+
+**SubAgent 使用场景**:
+
+| 场景 | 输出量 | 是否需要 SubAgent |
+|------|--------|-------------------|
+| 远程编译 | 5000-20000 行 | **必需** |
+| 远程测试 | 100-500 行 | 推荐 |
+| 代码搜索 | 50-200 行 | 可选 |
+| 单文件读取 | <100 行 | 不需要 |
+
+**SubAgent 调用模式**:
+
+```
+使用 Agent 工具调用 subAgent:
+
+描述: 远程编译 torch_npu
+提示词: |
+  执行远程编译任务，只返回摘要结果：
+
+  1. python scripts/remote_build_agent.py build
+  2. 如果成功，python scripts/remote_build_agent.py test <test_path>
+
+  返回格式: {"success": bool, "key_errors": [最多10条关键错误]}
+```
+
+SubAgent 执行完毕后，只有摘要结果返回给主 Agent，大量日志被隔离。
 
 ## 常见问题类型
 
