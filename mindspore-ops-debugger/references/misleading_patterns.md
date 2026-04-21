@@ -713,6 +713,62 @@ print(f"max_diff={diff.max()}, mismatch={( diff > 0.004).sum()}/{diff.numel()}")
 
 ---
 
+## M-015: PyNative 第 2 次循环 hang/core dump 实为旧 AclnnOpRunner cache-hit 槽位错位
+
+### 表面现象
+`iter 0` 正常，`iter 1` 或更早一次 cache hit 后 hang / coredump，堆栈常落在 `NnopbaseExecutorPrepareInputsParamsExt`、`PrepareParamsExt` 或 stage2 `executor->Run` 前后。
+
+### 常见误判
+- 定界到 **CANN sparse/kernel 算子缺陷**
+- 定界到 **`layout` / string 生命周期问题**
+- 定界到 **二阶段 aclnn executor 缓存失效**
+
+### 正确定界
+**MindSpore PyNative 旧自定义 ACLNN 框架缺陷** - `AclnnOpRunner + LAUNCH_ACLNN_FUNC` 的 cache-hit 地址刷新逻辑对 host `ValueDepend` 槽位处理不完整
+
+### 判断依据
+1. 首次调用成功，只有第二次及之后命中 LRU / executor cache 才崩溃
+2. 只在旧 `AclnnOpRunner + LAUNCH_ACLNN_FUNC` 路径复现；新 `PyboostRunner` 或 `CustomV2AclnnKernelMod` 路径不复现
+3. 崩溃前 executor 中本应是 host attr 的 `aclIntArray` / host `ValueDepend` 槽位已经变成后续 output tensor 的 device 地址
+4. 将原始 `std::vector<int64_t>` 改成带占位语义的 `std::pair<std::optional<std::vector<int64_t>>, bool>{value, true}` 后，多轮循环恢复正常
+
+### 验证实验
+```cpp
+// 旧写法: cache hit 时 GetAddr() 可能返回空 vector，导致槽位索引不前进
+std::vector<int64_t> actual_seq_lengths_query = {...};
+std::vector<int64_t> actual_seq_lengths_key = {...};
+
+// 验证性改法: 强制生成 host placeholder，保持 stage1 executor 槽位对齐
+auto actual_seq_lengths_query_arg =
+  std::pair<std::optional<std::vector<int64_t>>, bool>{actual_seq_lengths_query, true};
+auto actual_seq_lengths_key_arg =
+  std::pair<std::optional<std::vector<int64_t>>, bool>{actual_seq_lengths_key, true};
+```
+
+```bash
+# 现象验证: iter0 过，iter1 崩
+python test_pynative_loop.py --sparse-only
+
+# 替换为 pair-wrapped int-array 后再跑 20 轮
+# 若稳定通过，则优先定界到 MindSpore cache-hit 槽位对齐问题
+```
+
+### 根因类型
+- 旧 `op_api_convert.h` 的泛型 `GetAddr(T)` 对部分 host `ValueDepend` 输入返回 `{}`，不是 `{nullptr}` 占位
+- 泛型 `UpdateAddress(...)` 仅在地址 vector 非空时推进 `valid_index`
+- cache hit 时 host 槽位未占位，后续输入/输出地址覆盖前面的 `aclIntArray` / host attr 槽位
+- `CustomV2AclnnKernelMod` 之所以更安全，是因为它基于 `input_output_types_` 显式为数组类 host 输入写入 placeholder
+
+### 修复模式
+- 旧路径临时规避: 对 host int-array / bool-array / float-array 输入使用带 placeholder 语义的包装类型，确保 cache-hit 刷新时槽位数稳定
+- 框架长期修复: 将类型元数据带入 cache-hit 地址刷新逻辑，对 host `ValueDepend` 槽位统一生成 placeholder，而不是依赖泛型 `GetAddr(T)` 的空返回
+- 排查时优先比较旧 `AclnnOpRunner` 与新 `CustomV2AclnnKernelMod` 的地址列表构造方式，不要先入为主认定为 CANN kernel bug
+
+### 参考案例
+- **CS-036 (2026-04-21)**: sparse_lightning_indexer_grad_kl_loss_old PyNative 第 2 次循环 coredump
+
+---
+
 ## 持续更新
 
 每次发现新的误导模式，按以下模板添加：

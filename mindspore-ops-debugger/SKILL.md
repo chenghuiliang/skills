@@ -120,6 +120,7 @@ rg -l "allclose\|精度" md_files/gitcode/issues/
 12. 取整算子返回 2.14748e+09？ → 检查 M-012 (aclnn 内部 float→int32 溢出，平台特有)
 13. sign/特殊值函数仅特定 dtype 返回 NaN？ → 检查 M-013 (aclnn 对特定 dtype 的 NaN 处理不同)
 14. grad_cmp bfloat16 失败但 forward 正常？ → 检查 M-014 (测试基准 torch.tensor(int) 导致 backward 路径不对齐)
+15. PyNative 循环第 2 次才 hang/core dump，且只在旧 AclnnOpRunner 路径复现？ → 检查 M-015 (cache-hit host ValueDepend 槽位索引错位)
 ```
 
 **如果匹配误导模式**：

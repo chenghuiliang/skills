@@ -262,6 +262,19 @@
 | 引入类型 | 用例未适配 (PR#91253) |
 | 关键教训 | 模块重构时需同步更新所有依赖旧路径的导入语句 |
 
+### Case CS-036: sparse_lightning_indexer_grad_kl_loss_old PyNative 第 2 次循环 coredump (2026-04-21)
+
+| 字段 | 内容 |
+|------|------|
+| 问题 | `tests/st/custom/custom_op_builder/pyboost/jit_test_files/sparse_lightning_indexer_grad_kl_loss_old.cpp` 在 PyNative 循环调用时首轮正常、第二轮 cache hit 后 coredump |
+| 环境 | Ascend 910B, PyNative, 旧 `AclnnOpRunner + LAUNCH_ACLNN_FUNC` 自定义算子路径 |
+| 错误特征 | `python test_pynative_loop.py --sparse-only` 常在 `iter 1` 崩溃；栈落在 `NnopbaseExecutorPrepareInputsParamsExt` / `PrepareParamsExt`；新 `PyboostRunner` 版本不复现 |
+| 定界过程 | 1) 初看像 sparse kernel 或 `layout` 生命周期问题 2) 对比旧 `AclnnOpRunner` 与新 `CustomV2AclnnKernelMod` / `PyboostRunner` 的 cache-hit 处理 3) 发现崩溃只发生在 cache hit，且 stage2 前两个 `aclIntArray` 槽位已被后续 output tensor 地址覆盖 4) 将 host `std::vector<int64_t>` 改成 `std::pair<std::optional<std::vector<int64_t>>, bool>{value, true}` 后，循环 20 次稳定通过 |
+| 根因 | MindSpore 旧 `AclnnOpRunner` cache-hit 地址刷新逻辑有槽位索引错位：泛型 `GetAddr(T)` 对原始 host `std::vector<int64_t>` 返回 `{}`，`UpdateAddress(...)` 又只在地址非空时推进 `valid_index`，导致两个 `aclIntArray` 槽位在 cache hit 时被后续输出地址向前覆盖。最终二阶段 executor 复用了错位后的输入槽位并崩溃 |
+| 修复 | 旧路径规避：对 host int-array 输入使用带 placeholder 语义的包装类型，保证 cache-hit 刷新时仍占位；长期方案是在框架层为 host `ValueDepend` 输入统一补 placeholder，而不是依赖泛型 `GetAddr(T)` |
+| 引入类型 | MindSpore 旧自定义 `AclnnOpRunner` 框架缺陷 |
+| 关键教训 | 1) **iter0 正常、iter1 cache hit 崩溃** 是旧 `AclnnOpRunner` 槽位错位的强信号 2) 如果损坏的是 `aclIntArray` / host `ValueDepend` 槽位，不要过早归因到 `layout` string 生命周期或 CANN sparse kernel 3) 新 `CustomV2AclnnKernelMod` 明确维护了 host array placeholder，可作为对照路径 |
+
 ---
 
 ## 性能退化

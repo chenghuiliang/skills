@@ -226,6 +226,56 @@ tensor::TensorPtr InplaceOpAscendCustomize(const std::shared_ptr<OpRunner> &op,
 }
 ```
 
+### PyNative cache-hit 槽位对齐陷阱（旧 AclnnOpRunner）
+
+如果自定义 ACLNN 算子满足以下特征，要优先怀疑 **MindSpore 旧 cache-hit 地址刷新逻辑**，而不是直接怀疑 CANN kernel：
+
+- `iter 0` 正常，`iter 1` 或第一次 cache hit 后 hang / coredump
+- 只在旧 `AclnnOpRunner + LAUNCH_ACLNN_FUNC` 路径复现
+- 新 `PyboostRunner`、`CustomV2AclnnKernelMod` 或图模式路径不复现
+- 崩溃栈落在 `NnopbaseExecutorPrepareInputsParamsExt` / `PrepareParamsExt`
+
+#### 根因机制
+
+旧自定义路径在 cache miss 时会完成 stage1 建 executor；后续 cache hit 只刷新地址。风险点在于：
+
+1. `mindspore/ops/kernel/ascend/acl_ir/op_api_convert.h` 的泛型 `GetAddr(T)` 对部分 host `ValueDepend` 参数返回空地址列表 `{}`。
+2. 同文件的泛型 `UpdateAddress(...)` 只有在地址列表非空时才推进 `valid_index`。
+3. 如果 stage1 executor 里该 host 参数本来占了一个槽位，而 cache hit 刷新时没有对应 placeholder，后续输入/输出地址就会向前错位覆盖。
+4. 二阶段 `executor->Run` 使用到这些错位槽位时，就会表现为 `aclIntArray` / host attr 被 output tensor device 地址污染，最终在 Prepare 阶段崩溃。
+
+#### 哪些参数最危险
+
+- `std::vector<int64_t>` / `aclIntArray`
+- `std::vector<bool>` / `aclBoolArray`
+- `std::vector<float>` / `aclFloatArray`
+- 任何通过 host `ValueDepend` 进入 stage1、但 cache-hit 刷新时没有稳定 placeholder 的参数
+
+#### 为什么新路径通常没问题
+
+`mindspore/ops/kernel/ascend/aclnn/kernel_mod_impl/customize/custom_v2_aclnn_kernel.cc` 会基于 `input_output_types_` 显式为 `kTypeIntArray` / `kTypeBoolArray` / `kTypeFloatArray` 写入 `{nullptr}` placeholder。这样即使 cache hit，也能保持 executor 槽位数与 stage1 一致。
+
+旧 `AclnnOpRunner` 的泛型 `GetTensorAddress(args...)` 没有这层类型信息，因此更容易在 host attr 上发生槽位漂移。
+
+#### 快速验证方法
+
+1. 对比旧路径与新路径的参数封装方式，重点看 host array / string / scalar 是否带 placeholder。
+2. 在 cache hit 前后打印 executor 输入槽位，确认原本 host `ValueDepend` 槽位是否变成 device-like 地址。
+3. 对 `std::vector<int64_t>` 参数做验证性改造：
+
+```cpp
+auto actual_seq_lengths_arg =
+  std::pair<std::optional<std::vector<int64_t>>, bool>{actual_seq_lengths, true};
+```
+
+如果这样改后多轮 PyNative 循环稳定通过，通常可以直接定界到 **MindSpore 旧 cache-hit 槽位对齐问题**。
+
+#### 规避与修复建议
+
+- 旧路径临时规避：对 host int-array 等输入提供显式 owner / placeholder 语义，确保 cache-hit 刷新时仍占位
+- 框架修复：把参数类型元数据带入 cache-hit 地址更新路径，统一为 host `ValueDepend` 输入生成 placeholder
+- 不要通过“把 stage1/stage2 强制塞进同一个 launch task”来规避问题，这会绕开缓存能力并造成明显性能退化
+
 ---
 
 ## 5. 图模式实现 (KBK KernelMod)
@@ -506,6 +556,10 @@ assert np.allclose(ms_grad.asnumpy(), torch_grad.numpy(), rtol=1e-4, atol=1e-4)
 ### Q: KBK 模式精度与 PyNative 不一致
 
 可能是 KernelMod 和 PyBoost Customize 使用了不同的 aclnn 接口或参数。确认两者调用路径一致。
+
+### Q: 自定义 ACLNN 算子首轮正常，第二轮 cache hit 后 coredump
+
+先检查是否命中旧 `AclnnOpRunner` cache-hit 槽位错位模式，而不是先认定为 CANN 算子 bug。重点看 host `ValueDepend` 输入（尤其 `aclIntArray`）在 cache-hit 刷新时是否生成了 placeholder；若没有，后续 output 地址可能覆盖这些槽位。
 
 ### Q: 动态 shape 在 KBK 下报错
 
