@@ -96,6 +96,61 @@ MindSpore 的 imod 算子在 Ascend 上精度异常，float16 输入时结果与
 
 skill 会自动执行 6 步工作流：问题分析 → 定界 → 定位 → 修复 → 回归验证 → 测试补充。
 
+## 远程增量编译与验证约定
+
+如果用户已经给出服务器上的标准环境初始化方式，优先严格照用，不要自行改成其他脚本或全量重编流程。以常见 MindSpore Ascend 环境为例：
+
+```bash
+cd /home/lch/work
+source env_ms.sh mindspore/
+cd mindspore
+```
+
+在这个基础上再执行编译或测试命令。
+
+### 增量编译
+
+修改 C++ / `ccsrc/` / `core/` / kernel / fallback 路径后，优先做增量编译：
+
+```bash
+cd /home/lch/work
+source env_ms.sh mindspore/
+cd mindspore
+bash build.sh -e ascend -V 910b -j64 -S on
+```
+
+注意：
+
+- 默认不要清空 `build/` 目录，除非用户明确要求全量重编
+- 纯 Python 或测试文件改动通常无需重新编译
+- 编译结束后再运行同一套 `source env_ms.sh mindspore/` 环境中的 Python/pytest，避免误用系统安装版本
+
+### 模式差异问题验证
+
+如果问题涉及 `PyNative` 和 `Graph/JIT` 不一致，验证时至少覆盖：
+
+1. 原始复现场景
+2. `PyNative` 模式结果
+3. `Graph/JIT` 模式结果
+4. 第三方基线（如 PyTorch）或历史正确结果
+
+对零维、空 shape、标量退化类问题，不只看值，还要核对 `shape`、rank、dtype。
+
+### 交付物与 PR 描述
+
+如果用户要求在 issue 目录沉淀材料，至少准备：
+
+- 定位总结 `*_summary.md`
+- 代码修改 `*_code_changes.diff`
+- PR 描述 `*_pr_description.md`
+
+生成 PR 描述时：
+
+- 必须先读取用户给出的 PR 模板文件
+- 只保留模板要求的字段和 checklist
+- `Test Plan and Test result` 必须写实际执行过的命令和结果，不能留空
+- 若 `/check-pr` 报“存在不符合模板的选项”，通常说明混入了旧版模板的检查项，需要按最新模板整体重写
+
 ### 更新 Skill
 
 当 skill 有更新时，重新同步即可：

@@ -57,6 +57,12 @@ MindSpore 相关资料在用户的工作目录下：
 4. **关联组件**: 涉及的算子名称、标签 (B-SIG-OPS 等)
 5. **预期行为**: 用户期望的正确结果
 
+如果用户提到 **`PyNative` / `Graph` / `JIT` 模式结果不一致**，额外记录：
+
+6. **模式差异矩阵**: 哪个模式正确，哪个模式错误，错误表现是 shape、dtype、数值还是报错
+7. **边界输入特征**: 是否包含 `0` 维、空 shape、广播退化、标量/张量混合等边界输入
+8. **对标基线**: 是否已有 PyTorch / NumPy / 历史版本 MindSpore 的正确结果可对照
+
 如果信息不完整，先向用户询问缺失的信息。
 
 ### Step 2: 定界
@@ -154,7 +160,25 @@ static_shape = (2, 3, 4)  # vs dynamic_shape with -1
 
 根据实验结果调整定界。
 
-#### 2.5 最终定界
+#### 2.5 模式差异问题专项判断
+
+如果问题表现为 `PyNative` 与 `Graph/JIT` 不一致，优先按“执行路径差异”定界，而不是直接假设 kernel 错误：
+
+- **`PyNative` 正常，`Graph/JIT` 异常**：
+  - 优先检查 fallback、expander、编译期 shape/type 推导、图模式专有分支
+  - 重点搜索 `math_ops.cc`、`frontend/expander/`、Infer 实现，以及图模式下的 helper/fallback 路径
+- **`Graph/JIT` 正常，`PyNative` 异常**：
+  - 优先检查运行时派发、缓存命中、PyNative 特有执行器路径、设备地址管理
+- **边界输入触发**：
+  - 如果输入含 `0` 维、空 shape、标量退化，不要只看“值是否正确”，必须同时核对输出 `shape`、`dtype`、rank 是否被错误降维
+  - 如果新逻辑分别依赖 `x` 和 `y` 的 shape 条件，必须分别验证“仅 x 命中”“仅 y 命中”“x/y 同时命中”三个分支
+
+典型信号：
+
+- “图模式返回标量 0，但预期应为空矩阵/零张量” → 高概率是 fallback 分支提前返回，破坏了 `shape_out`
+- “只有第二个输入含 0 维时复现” → 高概率是条件判断只覆盖了一个输入
+
+#### 2.6 最终定界
 
 综合以上步骤，给出最终定界结果：
 
@@ -243,6 +267,21 @@ pytest tests/st/ops/test_{op_name}.py -v
 pytest tests/st/ops/ -k "{keyword}" -v
 ```
 
+如果用户指定了远程 Ascend 服务器环境，优先沿用用户给出的环境初始化方式和增量编译命令。典型要求：
+
+```bash
+cd /home/lch/work
+source env_ms.sh mindspore/
+cd mindspore
+bash build.sh -e ascend -V 910b -j64 -S on
+```
+
+注意事项：
+
+- 不要默认清空 `build/`，除非用户明确要求全量重编
+- 只有修改了 C++ / core / kernel / 编译器相关代码时才需要增量编译；纯 Python 或纯测试文件改动可直接验证
+- 验证模式差异问题时，除了目标模式，还要回归另一个模式，避免修复后引入新的 `PyNative`/`Graph` 分叉
+
 ### Step 6: 测试补充
 
 读取 `references/testing_guide.md` 获取测试框架使用指南。
@@ -253,6 +292,17 @@ pytest tests/st/ops/ -k "{keyword}" -v
 - 多 dtype (fp16/fp32/fp64/int32/bool)
 - 多设备 (CPU/GPU/Ascend)
 - 多模式 (Graph/PyNative)
+
+对边界 shape / 零维修复，补测时额外执行以下检查：
+
+- 如果 bug 由某一侧输入的 shape 条件触发，必须补“仅另一侧输入命中”的镜像用例
+- 如果修复改变了 fallback 的返回类型，必须同时断言 `shape`、`dtype`、值，而不只断言数值
+- 如果原问题是“返回标量 0”或“空张量 shape 丢失”，必须补 rank/shape 断言，防止结果被静默降维
+- 对 `matmul` / `bmm` / 广播类算子，优先覆盖：
+  - `x` 含 0 维
+  - `y` 含 0 维
+  - `x` / `y` 同时影响输出 shape 但输出非空
+  - `shape_out` 为空时是否仍应返回标量
 
 ## 专项场景
 
@@ -325,6 +375,39 @@ rg -l "{OpName}" mindspore/mindspore/ops/kernel/
 ## 补充测试
 {新增的测试用例描述}
 ```
+
+如果用户要求沉淀交付物到 issue 目录，至少输出以下文件：
+
+- `*_summary.md`：问题现象、定界、根因、修复、验证结论
+- `*_code_changes.diff`：本次代码修改 diff
+- `*_pr_description.md`：按模板生成的 PR 描述
+
+## PR 描述与交付物
+
+如果用户要求编写 PR 描述，按以下顺序执行：
+
+1. **先读用户提供的模板文件**，不要凭记忆复用旧模板
+2. **以最新模板为唯一准绳**；如果仓库里同时存在中英文两套模板，禁止混用字段
+3. **逐项核对必填块**，尤其是：
+   - `/kind <label>`
+   - `What does this PR do / why do we need it`
+   - `Fixes #<issue_id>`
+   - `Test Plan and Test result`
+   - `Self-checklist`
+4. **`Test Plan and Test result` 不能为空**，要写清：
+   - 验证场景
+   - 远程编译/测试命令
+   - 实际结果（如 `3 passed, 18 deselected`）
+   - 如有 PyTorch/NumPy 对标，写明一致性结论
+5. **只保留模板要求的检查项**；如果历史文件里混入旧版英文检查项，必须整体替换为当前模板项
+6. **接口/文档类未涉及项可以保留未勾选**，但不要删除该检查项
+
+常见错误：
+
+- 复用了旧模板中的英文 checklist，导致 `/check-pr` 校验失败
+- `Test Plan and Test result` 只有标题没有内容
+- `Fixes` 后粘贴 issue 链接而不是 issue 编号
+- 已切换到中文模板，但正文仍残留旧模板结构
 
 ## 持续学习
 
