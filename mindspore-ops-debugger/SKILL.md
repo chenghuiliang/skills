@@ -57,6 +57,12 @@ MindSpore 相关资料在用户的工作目录下：
 4. **关联组件**: 涉及的算子名称、标签 (B-SIG-OPS 等)
 5. **预期行为**: 用户期望的正确结果
 
+如果问题涉及 **`mindspore_op_plugin` / PyTorch 基线 / ATen 对标**，额外记录：
+
+6. **基线运行时信息**: `torch.__version__`、`torch._C` 动态库路径、plugin `.so/.dylib` 路径
+7. **libtorch 一致性**: plugin 是否链接仓库内置 libtorch，而 Python `torch` 是否加载了环境里的另一套 libtorch
+8. **零容差前提**: 当前对标是否要求 bitwise exact，还是仅要求数值等价
+
 如果用户提到 **`PyNative` / `Graph` / `JIT` 模式结果不一致**，额外记录：
 
 6. **模式差异矩阵**: 哪个模式正确，哪个模式错误，错误表现是 shape、dtype、数值还是报错
@@ -127,6 +133,8 @@ rg -l "allclose\|精度" md_files/gitcode/issues/
 13. sign/特殊值函数仅特定 dtype 返回 NaN？ → 检查 M-013 (aclnn 对特定 dtype 的 NaN 处理不同)
 14. grad_cmp bfloat16 失败但 forward 正常？ → 检查 M-014 (测试基准 torch.tensor(int) 导致 backward 路径不对齐)
 15. PyNative 循环第 2 次才 hang/core dump，且只在旧 AclnnOpRunner 路径复现？ → 检查 M-015 (cache-hit host ValueDepend 槽位索引错位)
+16. 只有某个 non-contiguous/view 用例精度失败？ → 检查 M-016 (表象是布局，实为 PyTorch/op_plugin 基线运行时不一致)
+17. plugin 已使能但某个前向路径仍落到 builtin？ → 检查 M-017 (表象是“plugin 不生效/上游 bug”，实为 primitive 名精确匹配导致的 mixed routing)
 ```
 
 **如果匹配误导模式**：
@@ -139,6 +147,8 @@ rg -l "allclose\|精度" md_files/gitcode/issues/
 - `allclose` 失败 + 梯度为零 → 实际是 bprop 缺陷 (M-001, CS-001)
 - `AbstractProblem` → 实际是编译器 pass 问题 (M-002, CS-009)
 - 精度不一致 (< 1e-3) → 实际是 CANN/基准版本变更 (M-003, CS-002/CS-005)
+- “只有 transpose/view 用例失败” → 实际是 Python torch 与 plugin 内部 ATen 不在同一套 libtorch runtime 上 (M-016)
+- “已经 import ms_op_plugin 了，为什么还会走到内置 CPU kernel” → 实际是当前 primitive 名未被 plugin 注册接管，且可能出现 forward builtin / backward plugin 的 mixed routing (M-017)
 
 #### 2.4 对比实验验证
 
@@ -159,6 +169,110 @@ static_shape = (2, 3, 4)  # vs dynamic_shape with -1
 ```
 
 根据实验结果调整定界。
+
+#### 2.4.1 `mindspore_op_plugin` / PyTorch 基线一致性专项
+
+如果问题是 CPU `op_plugin` 与 PyTorch 基线的精度对比，且误差只有 1 ULP 或仅在个别样本/个别 view 用例触发，优先检查“是否真的在比较同一套 ATen runtime”，不要先入为主定界到 layout 或 kernel 逻辑错误。
+
+**必做检查**：
+
+```bash
+# Python torch 动态库
+python - <<'PY'
+import torch
+print(torch.__version__)
+print(torch.__file__)
+print(torch._C.__file__)
+PY
+
+# plugin 依赖的 libtorch/c10
+ldd build/ms_op_plugin/lib/libms_op_plugin.so | egrep "torch_cpu|c10"
+# macOS 用:
+# otool -L build/ms_op_plugin/lib/libms_op_plugin.dylib | egrep "torch_cpu|c10"
+
+# Python torch._C 依赖的 libtorch/c10
+ldd $(python - <<'PY'
+import torch
+print(torch._C.__file__)
+PY
+) | egrep "torch_cpu|c10"
+```
+
+**判断规则**：
+- 如果 `libms_op_plugin.so` 链到仓库内置 `build/ms_op_plugin/lib/libtorch_cpu.so`
+- 同时 `torch._C` 链到 site-packages 下的另一套 `torch/lib/libtorch_cpu.so`
+- 那么当前进程里就存在两套 libtorch runtime，0 容差对标不再可靠
+
+**进一步定界实验**：
+
+```python
+# 1. 同一随机输入，分别比较 contiguous / non-contiguous
+pt_contig = torch_fn(torch.tensor(x))
+ms_contig = ms_fn(ms.Tensor(x))
+
+pt_view = torch_fn(torch.tensor(x).transpose(0, 1))
+ms_view = ms_fn(mint.transpose(ms.Tensor(x), 0, 1))
+
+# 2. 比较 plugin 自身 contiguous vs non-contiguous 是否一致
+ms_view_back = ms_view.asnumpy().transpose(1, 0, 2)
+np.max(np.abs(ms_contig.asnumpy() - ms_view_back))
+```
+
+**结论解释**：
+- 如果 contiguous 和 non-contiguous 对 PyTorch 的误差量级一致，而 plugin 自身两条路径互相比为 0
+- 则“只有 non-contiguous 用例失败”通常只是测试样本刚好触发了 0 容差断言，不是 layout 根因
+- 此时应优先修正基线一致性认知或测试断言命名/注释，不要贸然改算子实现
+
+#### 2.4.2 `mindspore_op_plugin` 路由与 primitive 名一致性专项
+
+如果现象是“`ms_op_plugin` 已导入/已使能，但某个 CPU 前向路径仍执行到 MindSpore builtin kernel”，不要先入为主定界到 builtin 缺陷或 plugin 实现错误。先确认当前 API 最终落到哪个 primitive 名，再核对 plugin registry 是否真的接管了这个名字。
+
+**核心认知**：
+- `MS_OP_PLUGIN_PATH` 已设置、`ms_op_plugin` 已导入，只能证明 plugin 被加载；不能证明当前 API 路径对应的 primitive 已被 plugin 接管
+- CPU `op_plugin` 的路由通常按 `primitive_->name()` 与 plugin 注册表做精确匹配
+- 因此可能出现 mixed routing：forward 落 builtin，而 backward 因为命中了 `*Grad` 注册又落到 plugin
+
+**必做检查**：
+
+```bash
+# 1. 确认 plugin 已加载
+python - <<'PY'
+import os
+import ms_op_plugin
+print("MS_OP_PLUGIN_PATH =", os.getenv("MS_OP_PLUGIN_PATH"))
+print("ms_op_plugin =", ms_op_plugin.__file__)
+PY
+
+# 2. 查 API 最终对应的 primitive 名
+rg -n "nllloss|nllloss_impl|Primitive|prim" mindspore/python/mindspore/
+
+# 3. 查 MindSpore CPU plugin 的 exact-name 路由点
+rg -n "IsOpPluginKernel|primitive_->name\\(" mindspore/ops/kernel/cpu/
+
+# 4. 查 plugin registry 是否包含该 primitive 名
+rg -n "NLLLoss|NLLLossGrad|NLLLoss2d|NLLLossExt" op_plugin/ops/generated_reg.h
+
+# 5. 查 backward/bprop 发射的 primitive 名
+rg -n "NLLLoss|NLLLossGrad" mindspore/ccsrc/frontend/expander/
+```
+
+**判断规则**：
+- 如果前端 API 最终发射的是 primitive `A`
+- plugin registry 只注册了 `AExt` / `A2d` / `AGrad`，没有注册精确同名的 `A`
+- 则即使 plugin 已加载，`A` 的该条前向路径仍会回落到 builtin
+- 如果 backward 发射的是另一个已注册名字，则会形成 forward builtin / backward plugin 的混合路径
+
+**推荐排查顺序**：
+1. 从用户调用的 Python API 反推到实际 primitive 名，不要停留在高层 API 名称
+2. 检查 plugin registry 是否存在“语义相近但名字不同”的注册项，不要把 `NLLLoss2d`/`NLLLossExt` 误当成已覆盖 `NLLLoss`
+3. 单独核对 forward 和 backward 的 primitive 名，确认是否发生 mixed routing
+4. 只有在确认 primitive 已命中 plugin 后，再继续分析 plugin kernel 本身
+
+**典型案例**：
+- `mint.nn.NLLLoss`：plugin 已正确加载，但 2D forward 实际走的是 primitive `NLLLoss`
+- plugin registry 只有 `NLLLossGrad`、`NLLLoss2d`、`NLLLoss2dGrad`、`NLLLossExt`，没有 `NLLLoss`
+- 结果是 forward 落 builtin CPU `NLLLoss`，而 backward 因命中 `NLLLossGrad` 落到 plugin
+- 这类问题首先是路由/注册缺口，不应误判为“plugin 已全量接管”或“builtin/kernel 数值缺陷”
 
 #### 2.5 模式差异问题专项判断
 
@@ -258,6 +372,10 @@ rg -l "Appearance & Root Cause" md_files/gitcode/issues/ | \
 1. 运行原始复现脚本验证修复
 2. 运行该算子相关的测试用例
 3. 检查修改是否引入新问题
+
+如果修复涉及测试基线或 tolerance：
+4. 证明 tolerance 放宽是最后手段，而不是掩盖真实 kernel bug
+5. 记录“为什么不能保持 0 容差”的运行时证据（例如双 libtorch runtime、基线路径不一致、CANN 版本变更）
 
 ```bash
 # 算子级测试
