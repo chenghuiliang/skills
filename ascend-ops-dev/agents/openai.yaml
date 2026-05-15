@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ascend Ops Dev"
+  short_description: "CANN aclnn 算子封装与验证执行清单"
+  default_prompt: "Use $ascend-ops-dev to analyze the full CANN execution path, implement a minimal aclnn wrapper, and verify it with UT, examples, and device-side tests."
+
+policy:
+  allow_implicit_invocation: true

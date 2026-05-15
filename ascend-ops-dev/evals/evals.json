@@ -1,0 +1,23 @@
+{
+  "skill_name": "ascend-ops-dev",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "请在 /Users/claw/work/cann/ops-math 中为一个已有 aclOp 的算子补 aclnn 两段式接口。要求严格对齐现网 aclOp 的已有能力，不允许新增广播，也不要默认新增 dtype。请给出分析路径、最小改动方案、UT 和 example 计划。",
+      "expected_output": "应该先界定能力边界，再横向检查 ops-math、canndev、ge 的实现路径，明确 aclOp 与 aclnn/L0 是否同链路，最后给出仅修改 op_api、测试和样例的最小方案，并注明何时才允许改 kernel。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "某个算子现网 aclOp 正常，但我新增 aclnn 封装后在 910B 实机失败。请分析为什么 aclOp 正常不能证明本地源码链路没问题，并给出排查顺序。",
+      "expected_output": "应该区分 aclOp、aclnn、L0、built-in TBE/AICPU、本地 AscendC kernel 的路径差异，说明发布态与本地源码可能不是同一执行链路，并要求用单算子编译、UT、smoke 和实机日志来定界问题。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "我要给 aclnnAddN 增加 ms.int8、ms.int16、ms.uint8、ms.uint16、ms.uint32、ms.uint64 支持。请判断这是不是只改白名单或 opdef 就够了，还是必须继续核实 kernel/L0/发布态能力。",
+      "expected_output": "应该明确不能只看白名单，必须核实 L0 真实执行能力、canndev built-in 已公开 dtype、kernel/tiling 是否支持，以及新增 dtype 是否会打到未验证路径；若用户要求对齐现网能力，应优先按发布态已公开能力收口。",
+      "files": []
+    }
+  ]
+}
