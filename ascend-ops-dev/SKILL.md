@@ -186,6 +186,48 @@ cmake --build build --target add_n_aclnn_smoke_test -j16
 
 再运行对应 smoke case，避免把“旧二进制未更新”误判为“新代码无效”。
 
+### 6.1 本地开发专用跑法与上库边界
+
+如果仓内正式门禁入口不足以支撑本地调试，可以临时增加**本地开发专用**探针，但必须满足：
+
+- 默认放在临时 worktree、未跟踪文件或明确会在提交前删除的临时代码里。
+- 不能把为“本地直跑”补的公共 UT 基座、独立 smoke、调试脚本、临时打印、临时 json/so 适配一并上库。
+- 最终上库提交只保留正式 `op_api/`、正式 `tests/ut/`、`examples/`、`docs/` 与被真实链路证明必要的 host/kernel 修复。
+
+推荐的本地开发顺序：
+
+1. 先跑正式可保留入口。
+   例如：
+
+```bash
+cd /home/lch/work
+source env_ms.sh
+cd /home/lch/work/<worktree>/ops-math
+bash build.sh --opapi --noexec --ops=add_n -j16
+```
+
+2. 若要验证 `aclOp` 基线能力，优先写最小独立探针，不要改公共 UT 基座。
+   探针应覆盖：
+   - `aclopCompileAndExecuteV2`
+   - 关键 dtype / format
+   - 默认环境与 `ASCEND_CUSTOM_PATH=<empty_dir>` 对照
+
+3. 若要验证 `aclnn` 执行链路，可临时写一次性 smoke / example / 小型 gtest。
+   但这些文件若只是为本地调试补的，就不要并入最终提交。
+
+4. 如果需要隔离环境污染，优先使用：
+
+```bash
+export ASCEND_CUSTOM_PATH=/home/lch/work/empty_custom_path
+```
+
+或仅挂单一 vendor 目录；比较默认环境与干净环境结果后再下结论。
+
+5. 提交前必须回头检查：
+   - 是否把本地 smoke / 探针 / golden 脚本误带进 commit
+   - 是否改了 `tests/ut/op_api` 公共基础设施但实际上只服务当前单算子调试
+   - 是否把“本地跑法”错误固化成“正式门禁跑法”
+
 ### 7. 归档交付
 
 若用户要求交付件，至少整理：
