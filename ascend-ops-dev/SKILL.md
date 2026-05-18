@@ -117,12 +117,45 @@ description: >
 2. 再补 `aclnn` 的 UT / smoke / example
 3. 最后只对真实不对齐项做最小修复
 
+新增强制规则：
+
+- **`aclnn` 封装若宣称“对齐 `aclOp` 能力”，必须优先证明两者命中的实际执行路径一致或等价。**
+  这里的“路径”至少包括：AICore/AICPU 分流、built-in/vendor 资产来源、host binary 配置、kernel 资产命中结果。
+  不能只因为 `l0op::<Op>` 看起来支持某 dtype/format，就推断 `aclOp` 也公开支持，或推断 `aclnn` 已自动对齐。
+- **必须先做 `aclOp` 基线探针，再做 `aclnn` 对照。**
+  对于 dtype/format/平台争议项，先用最小 `aclOp` 探针直接调用现网安装环境中的 `aclopCompileAndExecuteV2` 或等价运行接口，
+  拿到真实返回码和输出，再决定 `aclnn` 要不要补能力、修路径或收缩文档。
+- **必须隔离环境污染后再下结论。**
+  若机器上存在 `opp/vendors/*` 自定义包、多个 `ASCEND_CUSTOM_PATH` 候选目录、旧版自定义 so/json/o 资产，必须至少补一轮“干净环境”对照：
+  例如把 `ASCEND_CUSTOM_PATH` 指到空目录，或只挂单一 vendor 目录，再分别复跑 `aclOp` / `aclnn` 关键 case。
+  未做环境隔离前，不能把失败直接归因到源码缺陷。
+
 特别注意：
 
 - **不要把本地 `l0op::<Op>` 或源码理论能力，当成 built-in `aclOp` 已公开能力**
 - format 能力必须实测；很多算子并不是“所有非 private format 都支持”
+- 若 `aclnn` 封装里存在 `ReFormat(..., ND)` 一类 descriptor 归一化步骤，不要默认它是必需的。先区分：
+  - `ReFormat` 往往只是改 tensor descriptor，不等于真实 `TransData`
+  - 真正的性能代价通常来自 `Contiguous` / `ViewCopy` / `TransData`
+  - 若怀疑 `ReFormat(ND)` 是冗余步骤，优先做一次“最小去除探针”：
+    1. 只移除 `ReFormat(ND)`，保留其余规整逻辑
+    2. 先跑 `GetWorkspaceSize` 定向 UT，确认 phase-1 不回归
+    3. 再跑执行级 smoke / example，确认 kernel 真正能过
+    4. 只有执行级证据也成立，才允许正式删除该步骤
+- 对 format 能力做结论时，必须区分：
+  - phase-1/`GetWorkspaceSize` 通过
+  - 执行级 smoke / example 通过
+  不能用前者替代后者
+- 若 `aclOp` 与 `aclnn` 某 dtype/format 的结论互相矛盾，优先排查：
+  - 是否跑到了不同的 built-in/vendor 资产
+  - 是否 `aclnn` 命中了本地 `ops-*` 资产而 `aclOp` 命中了安装态 built-in 资产
+  - 是否默认环境里混入了历史自定义包、旧二进制或旧 so
 - 若 full suite 在清理阶段有历史性崩溃，优先采用“单 case 单进程”探针或定向 `gtest_filter`
 - 进程退出阶段若有历史性 TBE/Python 清理崩溃，只能把“崩溃前已经打印出的单 case 结果”作为证据，且必须在结论中说明
+- 必须区分：
+  - **用例本体执行是否通过**
+  - **进程退出阶段是否发生历史性崩溃**
+  后者不能直接写成“算子执行失败”，除非已经证明崩溃发生在算子执行或结果校验之前
 - 报告中必须分别写清：`aclOp` 实测结论、`aclnn` 实测结论、两者差异、修复项、残留未验证风险
 
 ### 6. 做实机验证
@@ -140,7 +173,18 @@ source env_ms.sh
 
 - 一组 built-in `aclOp` 对比探针或等价调用
 - 一组 `aclnn` 定向 UT / smoke
+- 一组“干净环境 vs 默认环境”的对照结果
 - 一份按场景列出的 capability matrix
+
+补充经验：
+
+- `bash build.sh --opapi -u --noexec --ops=<op>` 不一定会重新生成或刷新某些独立 smoke 可执行；若源码已更新但 smoke 仍表现为旧行为，需直接执行：
+
+```bash
+cmake --build build --target add_n_aclnn_smoke_test -j16
+```
+
+再运行对应 smoke case，避免把“旧二进制未更新”误判为“新代码无效”。
 
 ### 7. 归档交付
 
