@@ -557,6 +557,66 @@ assert np.allclose(ms_grad.asnumpy(), torch_grad.numpy(), rtol=1e-4, atol=1e-4)
 
 可能是 KernelMod 和 PyBoost Customize 使用了不同的 aclnn 接口或参数。确认两者调用路径一致。
 
+### Q: `aclOp` 正常但 `aclnn` 失败，应该先查什么
+
+这是 ACLNN 适配里非常高频、也最容易误判的问题。默认不要先改 MindSpore infer，也不要先改 kernel 数学实现。
+
+优先排查顺序：
+
+1. **确认是不是同一运行路径**
+   - `aclOp` 成功不代表 `aclnn` 也走同一底层资产
+   - `aclnn` 常见是本地/nnopbase 静态 launcher 路径
+   - `aclOp` / 旧 MindSpore 可能走 built-in dynamic TBE 路径
+
+2. **隔离环境污染**
+
+```bash
+export ASCEND_CUSTOM_PATH=/tmp/empty_ascend_custom
+```
+
+3. **用 `strace` 抓运行时打开的资产**
+
+```bash
+strace -f -e openat <aclnn_case>
+strace -f -e openat <aclop_or_ms_case>
+```
+
+重点看是否出现：
+
+- `kernel/config/.../<op>.json`
+- `kernel/.../<op>/<Op>_*.o`
+- `impl/.../<op>.py`
+- `impl/.../dynamic/<op>.py`
+
+4. **反查 built-in `json` 覆盖范围**
+   - 对 `TensorList` / 多输入模板算子，重点检查某 dtype 是否只覆盖到 `input_count=32` 或其他边界
+
+5. **再看 CANN 源码的 3 个关键代码点**
+   - `op_api/<op>.cpp`：是否固定走 `ADD_TO_LAUNCHER_LIST_AICORE(...)`
+   - `opbase/.../make_op_executor.h`：静态 launcher 如何创建
+   - `op_host/<op>_def.cpp`：是否声明 `DynamicCompileStaticFlag(true)`
+
+### Q: `AddN` 这类 TensorList 算子的专项经验
+
+`AddN` 这次案例说明，`TensorList + 特定 dtype + 大输入个数` 是必须单独测的一类边界。
+
+典型症状：
+
+- `int64` 小输入个数通过
+- `int64` 大输入个数失败
+- `aclOp` / MindSpore 同场景成功
+
+优先根因：
+
+- 不是先验的 kernel 数学错误
+- 而是 `aclnn` 命中静态 bin 选择路径，且 built-in `json` 对该 dtype 的 `input_count` 覆盖不完整
+
+对这类算子，测试时至少补：
+
+- `2` 输入
+- `3` 输入
+- 一个“大输入个数” case，例如 `33`
+
 ### Q: 自定义 ACLNN 算子首轮正常，第二轮 cache hit 后 coredump
 
 先检查是否命中旧 `AclnnOpRunner` cache-hit 槽位错位模式，而不是先认定为 CANN 算子 bug。重点看 host `ValueDepend` 输入（尤其 `aclIntArray`）在 cache-hit 刷新时是否生成了 placeholder；若没有，后续 output 地址可能覆盖这些槽位。

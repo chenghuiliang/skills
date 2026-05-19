@@ -117,6 +117,12 @@ description: >
 2. 再补 `aclnn` 的 UT / smoke / example
 3. 最后只对真实不对齐项做最小修复
 
+对 `TensorList` / 多输入个数敏感算子，再补一条专项检查：
+
+1. 不要只测 `2` 输入和 `3` 输入，至少补一条“大输入个数” case
+2. 若某 dtype 在小输入个数通过、大输入个数失败，优先怀疑 **静态 bin 覆盖缺口**，不要先改 kernel 数学实现
+3. 先去 built-in `kernel/config/*/<op>.json` 查该 dtype 的 `input_count` 覆盖范围，再判断问题是在资产覆盖、动态 fallback，还是 kernel 本体
+
 新增强制规则：
 
 - **`aclnn` 封装若宣称“对齐 `aclOp` 能力”，必须优先证明两者命中的实际执行路径一致或等价。**
@@ -129,6 +135,11 @@ description: >
   若机器上存在 `opp/vendors/*` 自定义包、多个 `ASCEND_CUSTOM_PATH` 候选目录、旧版自定义 so/json/o 资产，必须至少补一轮“干净环境”对照：
   例如把 `ASCEND_CUSTOM_PATH` 指到空目录，或只挂单一 vendor 目录，再分别复跑 `aclOp` / `aclnn` 关键 case。
   未做环境隔离前，不能把失败直接归因到源码缺陷。
+- **若 `aclOp` 通过而 `aclnn` 失败，必须优先判定是“同一底层实现的能力缺口”还是“不同运行路径”。**
+  尤其是 `TensorList`、多 `input_count` 模板算子，常见分叉是：
+  - `aclnn` 命中 nnopbase 静态 bin 选择 + `*.o`
+  - `aclOp` 命中 built-in TBE dynamic 实现 + `dynamic/<op>.py`
+  这类问题的优先修复层通常是 **launcher/fallback/资产覆盖**，不是先改 kernel 数学逻辑。
 
 特别注意：
 
@@ -150,6 +161,11 @@ description: >
   - 是否跑到了不同的 built-in/vendor 资产
   - 是否 `aclnn` 命中了本地 `ops-*` 资产而 `aclOp` 命中了安装态 built-in 资产
   - 是否默认环境里混入了历史自定义包、旧二进制或旧 so
+- 若矛盾只出现在“大输入个数 + 某特定 dtype”，优先补做以下 4 步，而不是直接改 kernel：
+  1. `strace -f -e openat` 抓 `aclOp` 与 `aclnn` 分别打开了哪些 `.json` / `.o` / `.py` / `.pyc`
+  2. 从 `kernel/config/*/<op>.json` 反查失败 dtype 是否缺少对应 `input_count`
+  3. 核对 `op_host/*_def.cpp` 是否声明了 `DynamicCompileStaticFlag(true)` 一类动态编译能力
+  4. 回看 `op_api/*.cpp` 是否固定走了 `ADD_TO_LAUNCHER_LIST_AICORE` / `CreatAiCoreKernelLauncher(...)` 这条静态选择链路
 - 若 full suite 在清理阶段有历史性崩溃，优先采用“单 case 单进程”探针或定向 `gtest_filter`
 - 进程退出阶段若有历史性 TBE/Python 清理崩溃，只能把“崩溃前已经打印出的单 case 结果”作为证据，且必须在结论中说明
 - 必须区分：
@@ -175,6 +191,40 @@ source env_ms.sh
 - 一组 `aclnn` 定向 UT / smoke
 - 一组“干净环境 vs 默认环境”的对照结果
 - 一份按场景列出的 capability matrix
+
+如果怀疑是 **静态 bin 缺口 / dynamic fallback 缺失**，优先按下面顺序取证：
+
+```bash
+# 1. 隔离自定义包
+export ASCEND_CUSTOM_PATH=/tmp/empty_ascend_custom
+
+# 2. 对 aclnn 探针抓运行时打开的资产
+strace -f -e openat <aclnn_probe> <case>
+
+# 3. 对 aclOp 或 MindSpore 侧同场景抓运行时打开的资产
+strace -f -e openat <aclop_probe_or_ms_case>
+
+# 4. 反查 built-in kernel config
+python - <<'PY'
+import json
+path = "/path/to/opp/built-in/op_impl/ai_core/tbe/kernel/config/ascend910b/ops_legacy/add_n.json"
+cfg = json.load(open(path))
+print("inspect binList / supportInfo here")
+PY
+```
+
+看到下面这类特征时，可以直接把根因优先收敛到“路径/资产问题”：
+
+- `aclnn` 打开 `kernel/config/.../<op>.json` 和若干 `*.o`
+- `aclOp` / MindSpore 同场景打开 `impl/.../dynamic/<op>.py` 或 `.pyc`
+- 失败 dtype 在 `.json` 的 `binList` 里只覆盖到较小 `input_count`
+- `op_host/*_def.cpp` 又声明了可动态编译
+
+这时优先检查的代码点通常是：
+
+- `op_api/<op>.cpp` 里的 `ADD_TO_LAUNCHER_LIST_AICORE(...)`
+- `opbase/include/nnopbase/opdev/make_op_executor.h`
+- `op_host/<op>_def.cpp` 里的 `DynamicCompileStaticFlag(...)`
 
 补充经验：
 

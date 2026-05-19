@@ -170,7 +170,35 @@ static_shape = (2, 3, 4)  # vs dynamic_shape with -1
 
 根据实验结果调整定界。
 
-#### 2.4.1 `mindspore_op_plugin` / PyTorch 基线一致性专项
+#### 2.4.1 ACLNN 适配 / `aclOp` 与 `aclnn` 分流专项
+
+如果问题发生在 Ascend `aclnn` 适配或某个 `ops.*` 切换到 `aclnn` 之后，且现象是：
+
+- MindSpore 旧路径或 `aclOp` 正常
+- 新 `aclnn` 路径失败
+- 失败只出现在特定 dtype / format / 平台 / 输入个数
+
+不要先入为主定界到 MindSpore infer、前端 dispatch 或 kernel 数学逻辑。优先做下面 4 步：
+
+1. 用 MindSpore 侧用例先确认“用户可见失败矩阵”。
+2. 用最小 `aclOp` 探针跑同场景，确认 built-in 发布态是否真的可过。
+3. 用最小 `aclnn` 探针跑同场景，确认问题是否只在 `aclnn` 路径存在。
+4. 在干净环境下抓运行时资产：
+   - `export ASCEND_CUSTOM_PATH=/tmp/empty_ascend_custom`
+   - `strace -f -e openat ...`
+
+如果 `aclnn` 打开的是 `kernel/config/*.json + kernel/*.o`，而 `aclOp` / MindSpore 打开的是 `impl/dynamic/*.py`，优先定界为：
+
+- **CANN 运行路径分流**
+- **静态 bin 覆盖缺口或 dynamic fallback 差异**
+
+这类问题的第一落点通常不是 MindSpore 本身，而是：
+
+- CANN `op_api/*.cpp` 的 launcher 选择
+- `op_host/*_def.cpp` 的动态编译/静态编译能力声明
+- built-in OPP 资产覆盖范围
+
+#### 2.4.2 `mindspore_op_plugin` / PyTorch 基线一致性专项
 
 如果问题是 CPU `op_plugin` 与 PyTorch 基线的精度对比，且误差只有 1 ULP 或仅在个别样本/个别 view 用例触发，优先检查“是否真的在比较同一套 ATen runtime”，不要先入为主定界到 layout 或 kernel 逻辑错误。
 
@@ -223,7 +251,7 @@ np.max(np.abs(ms_contig.asnumpy() - ms_view_back))
 - 则“只有 non-contiguous 用例失败”通常只是测试样本刚好触发了 0 容差断言，不是 layout 根因
 - 此时应优先修正基线一致性认知或测试断言命名/注释，不要贸然改算子实现
 
-#### 2.4.2 `mindspore_op_plugin` 路由与 primitive 名一致性专项
+#### 2.4.3 `mindspore_op_plugin` 路由与 primitive 名一致性专项
 
 如果现象是“`ms_op_plugin` 已导入/已使能，但某个 CPU 前向路径仍执行到 MindSpore builtin kernel”，不要先入为主定界到 builtin 缺陷或 plugin 实现错误。先确认当前 API 最终落到哪个 primitive 名，再核对 plugin registry 是否真的接管了这个名字。
 
