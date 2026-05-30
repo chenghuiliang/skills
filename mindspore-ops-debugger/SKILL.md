@@ -302,6 +302,105 @@ rg -n "NLLLoss|NLLLossGrad" mindspore/ccsrc/frontend/expander/
 - 结果是 forward 落 builtin CPU `NLLLoss`，而 backward 因命中 `NLLLossGrad` 落到 plugin
 - 这类问题首先是路由/注册缺口，不应误判为“plugin 已全量接管”或“builtin/kernel 数值缺陷”
 
+#### 2.4.4 `rand` / `randn` / `randint` / `_like` 类随机算子路径核验专项
+
+如果问题集中在 `mint.rand`、`mint.randn`、`mint.randint` 及其 `_like` 变体，且现象是：
+
+- 表面上“能跑出结果”，但文档声明的设备/模式限制没有被触发
+- `CPU` 场景下看起来没有报错，或者不同路径的行为不一致
+- 只改了 Python 入口后，远端现象仍然像旧逻辑
+
+不要只看 Python wrapper。必须按“前端 -> infer -> PyNative composite -> Ascend customize”四层核验：
+
+1. 先确认 `ops_func_impl` 的 infer 是否真在拦截。
+2. 再确认 `pynative/utils/pyboost/functions/composite/` 里的 composite 是否也有同样约束。
+3. 如果是 Ascend 路径，再检查 `kernel/ascend/aclnn/pyboost_impl/customize/` 是否还有后续接管。
+4. 用最小复现分别验证 `CPU`、`Ascend`、`PyNative`、`Graph` 的真实行为，不要用“函数返回了 Tensor”当作“路径正确”的证据。
+
+**关键经验**：
+- 随机算子“能产生结果”不等于“该场景被支持”，也可能只是某一层没有拦住，最终落到了下游实现。
+- 如果现象和源码不一致，优先怀疑运行时加载了旧包或旧对象，而不是先怀疑判定逻辑本身。
+
+#### 2.4.5 远端旧对象 / 旧 package 混用专项
+
+在远端增量编译或手动拷贝 `.so` 后，如果“源码已改，但现象没变”或“不同函数看起来走了不同逻辑”，先排除混合状态：
+
+1. 确认远端工作树和本地修改的是同一份源码。
+2. 确认当前 Python 进程加载的是同一套 `build/package`，不是旧安装目录或旧 wheel。
+3. 对 C++/pyboost 改动，确认目标 `.so` 已重新编译，且 `build/package/mindspore/lib/` 下的产物已同步更新。
+4. 必要时在可疑函数里临时加硬错误（例如直接抛异常）验证调用链，避免被“看起来像没走到”误导。
+
+常见排查点：
+- `build/mindspore/**/libmindspore_pyboost.so`
+- `build/package/mindspore/lib/libmindspore_pyboost.so`
+- `build/**/build.make` / `link.txt` / `DependInfo.cmake`
+
+如果怀疑是旧对象残留，先清理“认知”而不是先清理目录：先证明当前进程实际加载了哪个二进制，再决定是否需要重编或重拷。
+
+#### 2.4.6 多算子连跑 / 中间状态污染专项
+
+如果问题只在“多个算子连跑”时出现，单独跑每个算子又正常，不要直接定界为某个算子数值误差。先做隔离实验：
+
+1. 将链式脚本拆成单算子脚本，确认第一个出问题的节点。
+2. 在关键节点间强制落盘/落地（例如 `asnumpy()`），排除懒执行、缓存复用或图缓存干扰。
+3. 在同一进程和全新进程分别运行，区分“测试框架污染”与“算子本身问题”。
+4. 对比单算子、两算子、整链三种结果，确认偏差是否随执行序列放大。
+
+这类现象常见根因不是某个算子本身，而是测试框架、状态缓存、后端 backoff、或前序算子改变了后续输入/上下文。
+
+#### 2.4.7 整型输入 / 累积类算子提升专项
+
+如果问题出现在 `cumprod`、`cumsum`、`prod` 这类累积或归约算子，并且输入是整型，不要默认“按原 dtype 计算”就是正确行为。先核对：
+
+1. MindSpore 文档/历史版本是否声明会提升累积 dtype。
+2. PyTorch / NumPy 在同 dtype 下的实际行为是否需要更宽的 accumulator。
+3. 现象是“精度损失”还是“整型溢出”，两者根因不同。
+
+如果是整型累积溢出，优先检查 infer / 前端 dtype 语义，而不是先改 kernel 数值实现。
+
+#### 2.4.8 复数 / 布尔 / 标量语义对标专项
+
+如果问题涉及 `Tensor.bool`、复数输入、标量到布尔的转换，或“文档没写清但基线有明确行为”的 dtype 语义，不要直接按主观预期定界。先做三件事：
+
+1. 对标 PyTorch / NumPy / TensorFlow 的实际行为，而不是只看文档描述。
+2. 核对 MindSpore 前端、infer、runtime 是否在同一层做了相同转换。
+3. 如果只有某一类型（例如 complex）有争议，优先确认这是“语义差异”还是“实现漏拦截”。
+
+这类问题常见误区是把跨框架语义差异误判成算子 bug，或者把文档不完整误判成实现错误。
+
+#### 2.4.9 参数型 shape / 语义校验放置专项
+
+如果算子依赖 `output_size`、`num_classes`、`padding_mode`、`index` 这类参数来决定合法性，不要默认把校验放在 Python 层就是最优方案。优先按下面顺序判断：
+
+1. 下层 `infer` 是否能以更低成本表达约束。
+2. PyNative composite 或 ACLNN 适配层是否已经有更靠近执行路径的校验点。
+3. backend 是否已经能返回清晰的 `RuntimeError`，可以不重复拦截。
+
+原则：
+- 能由 infer / composite / adapt 层拦住的，就不要在 Python 层做额外重复判断。
+- 如果底层已经给出清晰、合理的非法输入报错，就优先保留底层报错，避免重复拦截引入性能损耗。
+- 对动态 shape 场景，要单独验证 `None` / `-1` / 变长参数是否仍符合 backend contract。
+
+#### 2.4.10 测试框架 / 动态 shape 偏差专项
+
+如果问题只在 `MindSporeTest`、`pytest`、或特定环境变量下复现，不要先定界成算子本体错误。先确认：
+
+1. 直接跑最小 Python 脚本是否还能复现。
+2. `ME_DYNAMIC_SHAPE=1`、`MS_DISABLE_KERNEL_BACKOFF=0` 这类环境变量是否改变了执行路径。
+3. 失败是“测试断言方式不对”，还是“真实算子结果不对”。
+
+如果 `pytest.raises` 在特定模式下捕获不到，优先检查场景本身是否真的应该抛错，再决定是改实现、改模式限定，还是改用例断言。
+
+#### 2.4.11 文档 / 合同 / 实现分离专项
+
+如果问题看起来像“文档说不能这样，但实际能跑”或“文档没写清，测试却按另一种语义写了”，先把三件事分开：
+
+1. 文档是否真的描述了当前版本的合同。
+2. 实现是否返回了明确可解释的结果，还是落入了未定义行为。
+3. 测试是在校验合同，还是在替文档误差背书。
+
+典型场景包括负索引、非法 `output_size`、`index` 越界、以及算子是否支持某个 mode/device。先确定合同，再决定是修文档、修测试，还是修实现。
+
 #### 2.5 模式差异问题专项判断
 
 如果问题表现为 `PyNative` 与 `Graph/JIT` 不一致，优先按“执行路径差异”定界，而不是直接假设 kernel 错误：
@@ -314,6 +413,9 @@ rg -n "NLLLoss|NLLLossGrad" mindspore/ccsrc/frontend/expander/
 - **边界输入触发**：
   - 如果输入含 `0` 维、空 shape、标量退化，不要只看“值是否正确”，必须同时核对输出 `shape`、`dtype`、rank 是否被错误降维
   - 如果新逻辑分别依赖 `x` 和 `y` 的 shape 条件，必须分别验证“仅 x 命中”“仅 y 命中”“x/y 同时命中”三个分支
+- **结构算子反向异常**：
+  - 如果 forward 正常但 `grad`/`bprop` 的形状映射错误，优先检查反向公式、索引回填和广播还原逻辑，不要先怀疑 kernel 数值实现
+  - 典型对象包括 `trace`、`diag`、`select`、`index` 类结构算子
 
 典型信号：
 
@@ -427,6 +529,7 @@ bash build.sh -e ascend -V 910b -j64 -S on
 - 不要默认清空 `build/`，除非用户明确要求全量重编
 - 只有修改了 C++ / core / kernel / 编译器相关代码时才需要增量编译；纯 Python 或纯测试文件改动可直接验证
 - 验证模式差异问题时，除了目标模式，还要回归另一个模式，避免修复后引入新的 `PyNative`/`Graph` 分叉
+- 如果远端源码改了但现象没变，优先检查 `build/package` 是否仍在加载旧的 `mindspore_pyboost` 产物，再决定是否重新编译/同步产物
 
 ### Step 6: 测试补充
 
